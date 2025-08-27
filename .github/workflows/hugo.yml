@@ -31,7 +31,7 @@ jobs:
           hugo-version: '0.148.2'   # match your local; or 'latest'
           extended: true
       - name: Build
-        run: hugo --minify
+        run: hugo --minify --baseURL "https://makaato53.github.io/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3   # <-- upgraded
         with:

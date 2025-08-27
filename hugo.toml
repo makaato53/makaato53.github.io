@@ -1,4 +1,4 @@
-baseURL = "https://example.org/" # CHANGE to your real URL later (e.g., "https://YOURUSER.github.io/" or ".../my-site/")
+baseURL = "https://makaato53.github.io/"
 languageCode = "en-us"
 title = "Makaato’s Notes"
 theme = "PaperMod"
