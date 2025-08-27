@@ -1,0 +1,81 @@
+baseURL = "https://example.org/" # CHANGE to your real URL later (e.g., "https://YOURUSER.github.io/" or ".../my-site/")
+languageCode = "en-us"
+title = "Makaato’s Notes"
+theme = "PaperMod"
+
+[pagination]
+  pagerSize = 10
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]  # needed for search index
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[params]
+  description = "Learning notes in AI/ML, physics, astronomy."
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowWordCount = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowCodeCopyButtons = true
+  ShowBreadCrumbs = true
+  ShowToc = true
+  TocOpen = true
+  disableScrollToTop = false
+  comments = false
+
+  [params.search]
+    provider = "Fuse"
+
+[params.homeInfoParams]
+  Title = "Hey, I'm Makaato"
+  Content = "Learning in public / Random thoughts: AI/ML, physics, running."
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/makaato53"
+[[params.socialIcons]]
+  name = "linkedin"
+  url = "https://www.linkedin.com/in/makaato-serumaga-5610a9356/"
+
+# Top nav — Posts/Archive/Tags + Books, Musings, About, Resume
+[[menu.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 10
+[[menu.main]]
+  name = "Archive"
+  url = "/archives/"
+  weight = 20
+[[menu.main]]
+  name = "Tags"
+  url = "/tags/"
+  weight = 30
+[[menu.main]]
+  name = "Books"
+  url = "/books/"
+  weight = 40
+[[menu.main]]
+  name = "Musings"
+  url = "/musings/"
+  weight = 50
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 60
+[[menu.main]]
+  name = "Resume"
+  url = "/resume.pdf"
+  weight = 70
+
+# Math + code highlighting
+[params.math]
+  enable = true
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.highlight]
+    noClasses = false
