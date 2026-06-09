@@ -621,7 +621,169 @@ blockquote cite {
 
 [data-theme="dark"] .badge-wip { background: #2A1E08; color: #EF9F27; }
 
-/* ── FOOTER ──────────────────────────────── */
+/* ── BUILD LOG ───────────────────────────── */
+.build-log {
+  margin-top: 1rem;
+}
+
+.build-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.build-log-title {
+  font-family: var(--mono-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.build-log-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono-font);
+  font-size: 0.68rem;
+  color: var(--teal);
+}
+
+.build-log-status::before {
+  content: '';
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.arch-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.arch-layer {
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  border: 1px solid transparent;
+}
+
+.arch-layer-blue {
+  background: var(--accent-bg);
+  border-color: rgba(56,138,221,0.2);
+}
+
+.arch-layer-teal {
+  background: var(--teal-bg);
+  border-color: rgba(29,158,117,0.2);
+}
+
+.arch-layer-neutral {
+  background: var(--bg3);
+  border-color: var(--border);
+}
+
+.arch-layer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.arch-layer-name {
+  font-family: var(--mono-font);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.arch-layer-blue .arch-layer-name { color: var(--accent2); }
+.arch-layer-teal .arch-layer-name { color: var(--teal); }
+.arch-layer-neutral .arch-layer-name { color: var(--text2); }
+
+.arch-layer-tech {
+  font-family: var(--mono-font);
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+
+.arch-layer-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.arch-layer-blue .arch-layer-desc { color: var(--accent2); opacity: 0.85; }
+.arch-layer-teal .arch-layer-desc { color: var(--teal); opacity: 0.85; }
+.arch-layer-neutral .arch-layer-desc { color: var(--text2); }
+
+.arch-arrow {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text3);
+  line-height: 1;
+  margin: -2px 0;
+}
+
+.decisions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.decision-card {
+  border-radius: var(--radius);
+  padding: 0.875rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+
+.decision-label {
+  font-family: var(--mono-font);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+
+.decision-text {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.open-q {
+  font-size: 0.82rem;
+  color: var(--text2);
+  line-height: 1.6;
+  padding: 0.75rem 1rem;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--accent);
+  margin-bottom: 6px;
+}
+
+.open-q-label {
+  font-family: var(--mono-font);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 3px;
+}
+
 footer {
   position: relative;
   z-index: 1;
@@ -697,7 +859,7 @@ footer p {
       I build and ship machine learning systems. I write about what I'm working on, what breaks, and what I'm figuring out — including the occasional rabbit hole into physics, which I find genuinely useful for thinking about complex systems even though I'm no physicist.
     </p>
     <div class="hero-links">
-      <a href="mailto:hello@makaato.dev" class="btn btn-primary">Contact</a>
+      <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Contact</a>
       <a href="https://github.com" class="btn btn-ghost">GitHub ↗</a>
     </div>
   </section>
@@ -729,11 +891,11 @@ footer p {
       <div class="proj-row">
         <div class="proj-left">
           <div class="proj-name">AI agent system <span style="font-family:var(--mono-font);font-size:0.65rem;letter-spacing:0.06em;padding:2px 7px;border-radius:4px;background:var(--accent-bg);color:var(--accent);margin-left:6px;vertical-align:middle;">WIP</span></div>
-          <div class="proj-desc">Multi-step, tool-using agent architecture. Still being built — architecture notes and design decisions documented in the Lab section as they get figured out. This one's the main build-in-public project.</div>
+          <div class="proj-desc">General-purpose multi-agent system built on LangGraph + LiteLLM. Three-layer architecture: LiteLLM routes tasks to the right model (Qwen for code, DeepSeek for reasoning, Gemma for review), LangGraph manages the agent loop and state, ChromaDB + BM25 hybrid retrieval handles memory. RE:PAIR plugin for domain-specific tooling. Build log in the Lab section.</div>
         </div>
         <div class="proj-right">
           <span class="proj-year">2025</span>
-          <div class="proj-tags"><span class="tag">Python</span><span class="tag">Agents</span><span class="tag">LLMs</span></div>
+          <div class="proj-tags"><span class="tag">LangGraph</span><span class="tag">LiteLLM</span><span class="tag">ChromaDB</span><span class="tag">Python</span></div>
         </div>
       </div>
 
@@ -837,10 +999,12 @@ footer p {
         <div class="skill-block-label">ML &amp; modelling</div>
         <div class="skill-pills">
           <span class="skill-pill">PyTorch</span>
-          <span class="skill-pill">JAX</span>
           <span class="skill-pill">Transformers</span>
           <span class="skill-pill">Scikit-learn</span>
           <span class="skill-pill">HuggingFace</span>
+          <span class="skill-pill">LangGraph</span>
+          <span class="skill-pill">LiteLLM</span>
+          <span class="skill-pill">ChromaDB</span>
         </div>
       </div>
       <div class="skill-block">
@@ -883,26 +1047,102 @@ footer p {
     <div class="lab-grid">
       <div class="lab-card lab-card-a">
         <div class="lab-card-label">Currently building</div>
-        <div class="lab-card-text">An AI agent system — multi-step, tool-using, with a lot of moving parts. Notes and architecture details incoming as I work through it.</div>
+        <div class="lab-card-text">AI agent system — LangGraph orchestration, LiteLLM model routing, hybrid ChromaDB + BM25 memory. Getting the retrieval layer right before wiring up the full agent loop.</div>
       </div>
       <div class="lab-card lab-card-b">
         <div class="lab-card-label">Thinking about</div>
-        <div class="lab-card-text">How much of agent reliability is an architecture problem versus a prompting problem. Probably both. Figuring out where the line is.</div>
+        <div class="lab-card-text">How much of agent reliability is architecture vs prompting. The structured-output enforcement question keeps coming up — ambiguous prompts compound across steps fast.</div>
       </div>
       <div class="lab-card lab-card-c">
         <div class="lab-card-label">Changelog</div>
         <div class="changelog-row">
-          <span class="changelog-date">Jun 2025</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Site launched. Real content incoming.</span>
+          <span class="changelog-date">Jun 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Site launched. Building in public from here.</span>
         </div>
         <div class="changelog-row">
-          <span class="changelog-date">—</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Add your actual changelog entries here as you build.</span>
+          <span class="changelog-date">Jun 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Agent system: memory layer architecture settled. Hybrid ChromaDB + BM25 over pure embeddings.</span>
         </div>
         <div class="changelog-row">
-          <span class="changelog-date">—</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>This section is the transparency layer — raw progress, not polished updates.</span>
+          <span class="changelog-date">Jun 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Switched to HTTP API for Ollama — cleaner boundary than Docker socket, more production-like.</span>
         </div>
+        <div class="changelog-row">
+          <span class="changelog-date">Jun 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>LangGraph chosen over raw loop: stateful interaction, retries, branching built in.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENT SYSTEM BUILD LOG -->
+    <div class="tinted tinted-blue" style="margin-top: 1rem;">
+      <div class="build-log-header">
+        <span class="build-log-title">Agent system · build log</span>
+        <span class="build-log-status">active build</span>
+      </div>
+
+      <div class="build-log">
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Architecture — 3 layers</p>
+
+        <div class="arch-layers">
+          <div class="arch-layer arch-layer-blue">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Layer 1 · Interface</span>
+              <span class="arch-layer-tech">LiteLLM · Ollama · Web UI</span>
+            </div>
+            <div class="arch-layer-desc">LiteLLM as model gateway — routes tasks to the right model. Code → Qwen 2.5. Reasoning → DeepSeek. Review → Gemma. Generation → Llama 3. Local via Ollama, cloud SOTA as fallback. HTTP API not Docker socket.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-blue">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Layer 2 · Agent runtime</span>
+              <span class="arch-layer-tech">LangGraph · Supervisor pattern</span>
+            </div>
+            <div class="arch-layer-desc">LangGraph manages the loop: task in → agent asks model → model picks tool → Python executes → results loop back → model decides next step → final answer. Supervisor node with tool executor, reviewer, and final. Handles state, retries, branching, memory.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-teal">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Layer 3 · Memory (RAG)</span>
+              <span class="arch-layer-tech">ChromaDB · BM25 · sentence-transformers</span>
+            </div>
+            <div class="arch-layer-desc">Hybrid retrieval: embeddings for semantic/meaning similarity, BM25 for exact terms, config names, filenames, experiment IDs. Query → BM25 search → vector search → fuse results. 4 collections: agent traces, tool results, project docs, task results. Persistent to disk.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Design decisions</p>
+
+        <div class="decisions-grid">
+          <div class="decision-card">
+            <div class="decision-label">Why hybrid retrieval</div>
+            <div class="decision-text">Embeddings good at meaning similarity and natural language. BM25 good at exact keywords — config names, file paths, experiment IDs. Neither alone is enough.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Why LangGraph over raw loop</div>
+            <div class="decision-text">Stateful interaction, shared state across nodes, retries and branching built in. Higher abstraction — manage steps not individual calls.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Why HTTP API for Ollama</div>
+            <div class="decision-text">No security risk from Docker socket exposure. Cleaner service boundary. More production-like than daemon access.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">3 generic agents + plugins</div>
+            <div class="decision-text">Core agents: repair, geography, general. Domain-specific logic lives in plugins not agents — keeps the core clean and extensible.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Open questions</p>
+
+        <div class="open-q">
+          <span class="open-q-label">Unresolved</span>
+          How much of agent reliability comes from architecture vs prompt quality? Structured-output enforcement helps — ambiguous prompts compound across steps. Still figuring out where to draw that line.
+        </div>
+        <div class="open-q">
+          <span class="open-q-label">Considering</span>
+          Turbopuffer as vector store replacement for ChromaDB — better for sub-10M vector loads, runs on CPU, 16x compression. ChromaDB system RAM is a hard upper bound at scale.
+        </div>
+
       </div>
     </div>
   </section>
@@ -925,7 +1165,7 @@ footer p {
         This site is where I build in public. Finished things and unfinished things both live here.
       </p>
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-        <a href="mailto:hello@makaato.dev" class="btn btn-primary">Say hello</a>
+        <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Say hello</a>
         <a href="https://github.com" class="btn btn-ghost">GitHub ↗</a>
         <a href="https://linkedin.com" class="btn btn-ghost">LinkedIn ↗</a>
       </div>
@@ -939,7 +1179,7 @@ footer p {
   <div class="footer-links">
     <a href="https://github.com">GitHub</a>
     <a href="https://linkedin.com">LinkedIn</a>
-    <a href="mailto:hello@makaato.dev">Email</a>
+    <a href="mailto:makaato.serumaga@gmail.com">Email</a>
   </div>
 </footer>
 
