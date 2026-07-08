@@ -854,13 +854,13 @@ footer p {
   <!-- HERO -->
   <section class="hero visible">
     <div class="hero-eyebrow">Machine Learning Engineer</div>
-    <h1>Makaato Serumaga.<br>Building ML systems,<br><em>thinking out loud.</em></h1>
+    <h1>Makaato Serumaga.<br>ML Engineer. Curious about<br><em>most things, certain about very few.</em></h1>
     <p class="hero-body">
-      I build and ship machine learning systems. I write about what I'm working on, what breaks, and what I'm figuring out — including the occasional rabbit hole into physics, which I find genuinely useful for thinking about complex systems even though I'm no physicist.
+      ML engineer. I build and ship machine learning systems. This is where I think out loud.
     </p>
     <div class="hero-links">
       <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Contact</a>
-      <a href="https://github.com" class="btn btn-ghost">GitHub ↗</a>
+      <a href="https://github.com/makaato53" class="btn btn-ghost">GitHub ↗</a>
     </div>
   </section>
 
@@ -879,12 +879,12 @@ footer p {
 
       <div class="proj-row">
         <div class="proj-left">
-          <div class="proj-name">Semantic career matching engine</div>
-          <div class="proj-desc">NLP recommendation system for a job matching platform. Uses sentence-transformers to embed career descriptions and user input into semantic vectors — cosine similarity finds relevant matches even when the wording is completely different. "I like building things" surfaces mechanical design roles. Runs locally, no API dependency.</div>
+          <div class="proj-name">Semantic career matching engine · COTF</div>
+          <div class="proj-desc">NLP recommendation system built for NGen Canada's Careers of the Future platform. Four-stage pipeline: text encoding (title + skills + tags concatenated into one document), cosine similarity in embedding space, MMR re-ranking for diversity, ranked results with match explanations. Browser-mode runs BM25 + synonym expansion offline; backend mode switches to all-MiniLM-L6-v2 via FastAPI. Real bugs found and fixed mid-build — build log in Lab.</div>
         </div>
         <div class="proj-right">
           <span class="proj-year">2025</span>
-          <div class="proj-tags"><span class="tag">Python</span><span class="tag">sentence-transformers</span><span class="tag">NLP</span></div>
+          <div class="proj-tags"><span class="tag">Python</span><span class="tag">sentence-transformers</span><span class="tag">FastAPI</span><span class="tag">BM25</span></div>
         </div>
       </div>
 
@@ -924,35 +924,27 @@ footer p {
     <div class="tinted tinted-neutral">
       <div class="tinted-header">
         <span class="tinted-title">Essays &amp; notes</span>
-        <span class="tinted-count">add your posts</span>
+        <span class="tinted-count">essays incoming</span>
       </div>
 
       <div class="writing-row">
         <div class="writing-top">
-          <span class="writing-title">Add your actual writing here</span>
-          <span class="writing-date">—</span>
+          <span class="writing-title">Did we build AI to think geometrically because we do?</span>
+          <span class="writing-date">Coming soon</span>
         </div>
-        <div class="writing-excerpt">Replace these with real posts from your notebook. Technical deep-dives, honest post-mortems, half-formed ideas — all of it counts.</div>
-        <span class="writing-tag">placeholder</span>
-      </div>
-
-      <div class="writing-row">
-        <div class="writing-top">
-          <span class="writing-title">What I wish someone told me about training large models</span>
-          <span class="writing-date">—</span>
-        </div>
-        <div class="writing-excerpt">Practical stuff that only becomes obvious after you've burned compute on it. Replace this with something you've actually learned the hard way.</div>
-        <span class="writing-tag">working note</span>
-      </div>
-
-      <div class="writing-row">
-        <div class="writing-top">
-          <span class="writing-title">Why I keep reading about physics even though I'm not a physicist</span>
-          <span class="writing-date">—</span>
-        </div>
-        <div class="writing-excerpt">Not a technical essay — more of a personal note on why thinking in systems and constraints keeps showing up in how I approach ML problems.</div>
+        <div class="writing-excerpt">Why embeddings, attention, and loss landscapes all reduce to geometry — and whether that's a property of intelligence itself or just how minds that evolved to navigate space end up compressing abstract information.</div>
         <span class="writing-tag">essay</span>
       </div>
+
+      <div class="writing-row">
+        <div class="writing-top">
+          <span class="writing-title">Quantum mechanics and the future of computing</span>
+          <span class="writing-date">Coming soon</span>
+        </div>
+        <div class="writing-excerpt">What qubits, decoherence, and electron spin actually offer computing — and an honest look at where quantum advantage is real vs. where it's still a moonshot.</div>
+        <span class="writing-tag">essay</span>
+      </div>
+
     </div>
   </section>
 
@@ -1145,9 +1137,83 @@ footer p {
 
       </div>
     </div>
-  </section>
 
-  <!-- ABOUT -->
+    <!-- COTF BUILD LOG -->
+    <div class="tinted tinted-teal" style="margin-top: 1rem;">
+      <div class="build-log-header">
+        <span class="build-log-title" style="color:var(--teal);">Semantic career matching · COTF · build log</span>
+        <span class="build-log-status" style="color:var(--accent);">shipped</span>
+      </div>
+
+      <div class="build-log">
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Pipeline — 4 stages</p>
+
+        <div class="arch-layers">
+          <div class="arch-layer arch-layer-teal">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Stage 1 · Text encoding</span>
+              <span class="arch-layer-tech">sentence-transformers · all-MiniLM-L6-v2</span>
+            </div>
+            <div class="arch-layer-desc">Career title, industry description, skills, and tags concatenated into one document string. User input is the query. Browser-mode uses BM25 + synonym expansion offline; backend mode uses real embeddings via FastAPI on a local GPU server.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-teal">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Stage 2 · Cosine similarity</span>
+              <span class="arch-layer-tech">vectors in high-dimensional space</span>
+            </div>
+            <div class="arch-layer-desc">Documents and query represented as vectors. Cosine similarity measures the angle between them — 0° is identical meaning, 90° is unrelated. Handles paraphrasing: "I like fixing machines" and "preventive maintenance" end up pointing in roughly the same direction even with no shared words.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-teal">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Stage 3 · MMR re-ranking</span>
+              <span class="arch-layer-tech">Maximal Marginal Relevance</span>
+            </div>
+            <div class="arch-layer-desc">Pure cosine similarity clusters top results — all engineering roles if you mention engineering. MMR fixes this: each next result maximises λ × (relevance to query) − (1−λ) × (similarity to already-selected results). λ exposed as a UI slider. Lower λ = more diverse results across industries.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-neutral">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Stage 4 · Results</span>
+              <span class="arch-layer-tech">ranked cards with match explanation</span>
+            </div>
+            <div class="arch-layer-desc">Cards show match score, NAICS code, skills, education pathways, and a "why this matched" explanation row. Backend mode returns richer explanation strings from the API.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Bugs found mid-build</p>
+
+        <div class="decisions-grid">
+          <div class="decision-card">
+            <div class="decision-label" style="color:#993C1D;">Substring synonym collision</div>
+            <div class="decision-text">"ai" matched inside "air", "maintenance", "training". Plain string .replace() corrupted queries silently. Fixed with word-boundary regex — <code style="font-family:var(--mono-font);font-size:0.75rem;">\bai\b</code> instead of "ai".</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label" style="color:#993C1D;">Stopwords eating intent</div>
+            <div class="decision-text">"like", "enjoy", "love", "want" — the most natural ways a user expresses preference — were all in the stopword list. Stripped silently. "I do not like welding" became identical to "I like welding".</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label" style="color:#993C1D;">Match % always 100% for rank 1</div>
+            <div class="decision-text">Score normalised to top result, so rank 1 always showed 100% — even a weak match. A zero-match query produced NaN%. Replaced with qualitative labels: Strong / Good / Possible.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label" style="color:#993C1D;">MMR diversity over-inflated</div>
+            <div class="decision-text">Inter-document similarity used bigrams in Jaccard, making all careers look more distinct than they were. MMR under-penalised similarity. Fixed: Jaccard on unigrams only.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Architecture decision</p>
+
+        <div class="open-q" style="border-left-color:var(--teal);">
+          <span class="open-q-label" style="color:var(--teal);">Browser vs backend</span>
+          Browser mode (BM25 + synonym expansion) is a working offline fallback — no API key, no server needed. Backend mode (sentence-transformers via FastAPI) is the real thing. The right production path: HTML is a UI shell, the backend does all matching, browser JS shows a clear "semantic matching unavailable" warning rather than silently degrading.
+        </div>
+
+      </div>
+    </div>
+  </section>
   <section id="about">
     <div class="sec-header">
       <span class="sec-label">About</span>
@@ -1166,8 +1232,8 @@ footer p {
       </p>
       <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
         <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Say hello</a>
-        <a href="https://github.com" class="btn btn-ghost">GitHub ↗</a>
-        <a href="https://linkedin.com" class="btn btn-ghost">LinkedIn ↗</a>
+        <a href="https://github.com/makaato53" class="btn btn-ghost">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/makaato-serumaga-5610a9356/" class="btn btn-ghost">LinkedIn ↗</a>
       </div>
     </div>
   </section>
@@ -1175,10 +1241,10 @@ footer p {
 </main>
 
 <footer>
-  <p>Makaato Serumaga · Machine Learning Engineer · London, ON</p>
+  <p>Makaato Serumaga · Machine Learning Engineer</p>
   <div class="footer-links">
-    <a href="https://github.com">GitHub</a>
-    <a href="https://linkedin.com">LinkedIn</a>
+    <a href="https://github.com/makaato53">GitHub</a>
+    <a href="https://www.linkedin.com/in/makaato-serumaga-5610a9356/">LinkedIn</a>
     <a href="mailto:makaato.serumaga@gmail.com">Email</a>
   </div>
 </footer>
