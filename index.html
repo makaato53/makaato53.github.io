@@ -958,7 +958,7 @@ footer p {
     <div class="tinted tinted-teal">
       <div class="tinted-header">
         <span class="tinted-title">Currently reading</span>
-        <span class="tinted-count">3 books</span>
+        <span class="tinted-count">4 books</span>
       </div>
 
       <div class="book-row">
@@ -968,13 +968,18 @@ footer p {
       </div>
       <div class="book-row">
         <span class="book-num">02</span>
-        <span class="book-title">Beyond Good and Evil</span>
-        <span class="book-author">Friedrich Nietzsche</span>
+        <span class="book-title">Moby Dick</span>
+        <span class="book-author">Herman Melville</span>
       </div>
       <div class="book-row">
         <span class="book-num">03</span>
-        <span class="book-title">Moby Dick</span>
-        <span class="book-author">Herman Melville</span>
+        <span class="book-title">What Is Real?</span>
+        <span class="book-author">Adam Becker</span>
+      </div>
+      <div class="book-row">
+        <span class="book-num">04</span>
+        <span class="book-title">The Idea Factory</span>
+        <span class="book-author">Jon Gertner</span>
       </div>
     </div>
   </section>
@@ -1039,11 +1044,11 @@ footer p {
     <div class="lab-grid">
       <div class="lab-card lab-card-a">
         <div class="lab-card-label">Currently building</div>
-        <div class="lab-card-text">AI agent system — LangGraph orchestration, LiteLLM model routing, hybrid ChromaDB + BM25 memory. Getting the retrieval layer right before wiring up the full agent loop.</div>
+        <div class="lab-card-text">AI agent system — architecture is settled, memory layer is working. Hitting the ceiling on small local models. Next: quantizing and running larger models (70B+) to see what's actually possible on available hardware.</div>
       </div>
       <div class="lab-card lab-card-b">
         <div class="lab-card-label">Thinking about</div>
-        <div class="lab-card-text">How much of agent reliability is architecture vs prompting. The structured-output enforcement question keeps coming up — ambiguous prompts compound across steps fast.</div>
+        <div class="lab-card-text">Whether agent reliability problems are fundamentally prompting issues or model capability issues. Increasingly convinced it's the latter — and that quantized large models are the only honest way to test that.</div>
       </div>
       <div class="lab-card lab-card-c">
         <div class="lab-card-label">Changelog</div>
@@ -1133,6 +1138,17 @@ footer p {
         <div class="open-q">
           <span class="open-q-label">Considering</span>
           Turbopuffer as vector store replacement for ChromaDB — better for sub-10M vector loads, runs on CPU, 16x compression. ChromaDB system RAM is a hard upper bound at scale.
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;margin-top:1.25rem;">What's next</p>
+
+        <div class="open-q" style="border-left-color:var(--text3);">
+          <span class="open-q-label" style="color:var(--text3);">Conclusion on small models</span>
+          Running small local models through LiteLLM was the right call for getting the architecture working — cheap, fast to iterate, no API costs. But the ceiling is low. The reliability problems (hallucinated tool calls, inconsistent structured output, reasoning failures on multi-step tasks) aren't prompting problems. They're model capability problems. Small models aren't the answer for a serious agent system.
+        </div>
+        <div class="open-q" style="border-left-color:var(--accent);">
+          <span class="open-q-label">Next experiment</span>
+          Quantization and optimization of larger models — running something like Llama 3 70B or Qwen 72B locally via GGUF/AWQ quantization. The question isn't whether bigger models are better (they are) — it's whether they can run at acceptable speed on available hardware once quantized, and what the quality/compression tradeoff looks like at different bit widths.
         </div>
 
       </div>
