@@ -874,7 +874,18 @@ footer p {
     <div class="tinted tinted-blue">
       <div class="tinted-header">
         <span class="tinted-title">ML &amp; AI</span>
-        <span class="tinted-count">3 projects</span>
+        <span class="tinted-count">4 projects</span>
+      </div>
+
+      <div class="proj-row">
+        <div class="proj-left">
+          <div class="proj-name">HUEY — local model optimization lab <span style="font-family:var(--mono-font);font-size:0.65rem;letter-spacing:0.06em;padding:2px 7px;border-radius:4px;background:var(--accent-bg);color:var(--accent);margin-left:6px;vertical-align:middle;">WIP</span></div>
+          <div class="proj-desc">Systems research on a single 24GB RTX 3090: how much reliable agent capability can be recovered by quantizing a model and spending the freed VRAM on better inference? Quantized Qwen3.5-9B (BF16/INT8/NF4), built a 144-task held-out benchmark with objective scoring to separate real quality loss from formatting noise, and is now testing whether multiple NF4 candidates plus executable verification can beat a single BF16 pass. The experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously. Build log in Lab.</div>
+        </div>
+        <div class="proj-right">
+          <span class="proj-year">2026</span>
+          <div class="proj-tags"><span class="tag">Quantization</span><span class="tag">bitsandbytes</span><span class="tag">CUDA</span><span class="tag">Benchmarking</span></div>
+        </div>
       </div>
 
       <div class="proj-row">
@@ -902,11 +913,11 @@ footer p {
       <div class="proj-row">
         <div class="proj-left">
           <div class="proj-name">ML systems · RE:PAIR</div>
-          <div class="proj-desc">Professional work — details intentionally vague. Building and shipping ML infrastructure in a production environment. More specifics when I can share them.</div>
+          <div class="proj-desc">Professional work — details intentionally vague. Recent focus: production-grade ML data infrastructure for large-scale, memory-constrained training — memory-mapped datasets, index-based shuffling instead of full-dataset copies, and systematic benchmarking of storage and access patterns across CPU, GPU, and I/O. Some of it supports biological sequence modeling. More specifics when I can share them.</div>
         </div>
         <div class="proj-right">
           <span class="proj-year">Ongoing</span>
-          <div class="proj-tags"><span class="tag">ML</span><span class="tag">Production</span></div>
+          <div class="proj-tags"><span class="tag">ML</span><span class="tag">Production</span><span class="tag">Data pipelines</span></div>
         </div>
       </div>
 
@@ -1002,6 +1013,7 @@ footer p {
           <span class="skill-pill">LangGraph</span>
           <span class="skill-pill">LiteLLM</span>
           <span class="skill-pill">ChromaDB</span>
+          <span class="skill-pill">Quantization</span>
         </div>
       </div>
       <div class="skill-block">
@@ -1009,6 +1021,7 @@ footer p {
         <div class="skill-pills">
           <span class="skill-pill">Python</span>
           <span class="skill-pill">CUDA</span>
+          <span class="skill-pill">NumPy</span>
           <span class="skill-pill">Docker</span>
           <span class="skill-pill">Linux</span>
           <span class="skill-pill">Git</span>
@@ -1044,14 +1057,26 @@ footer p {
     <div class="lab-grid">
       <div class="lab-card lab-card-a">
         <div class="lab-card-label">Currently building</div>
-        <div class="lab-card-text">AI agent system — architecture is settled, memory layer is working. Hitting the ceiling on small local models. Next: quantizing and running larger models (70B+) to see what's actually possible on available hardware.</div>
+        <div class="lab-card-text">HUEY — a local-model lab on a single RTX 3090. Just wrapped a 144-task benchmark showing NF4 quantization recovers roughly 50% of GPU memory for a small, statistically inconclusive quality cost. Now testing multiple NF4 candidates plus executable verification against single-pass BF16.</div>
       </div>
       <div class="lab-card lab-card-b">
         <div class="lab-card-label">Thinking about</div>
-        <div class="lab-card-text">Whether agent reliability problems are fundamentally prompting issues or model capability issues. Increasingly convinced it's the latter — and that quantized large models are the only honest way to test that.</div>
+        <div class="lab-card-text">Whether model quality and system reliability are actually separable — whether a slightly worse model, given the freed-up memory to generate more attempts and a verifier to check them, can out-perform a better model working alone.</div>
       </div>
       <div class="lab-card lab-card-c">
         <div class="lab-card-label">Changelog</div>
+        <div class="changelog-row">
+          <span class="changelog-date">Sep 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>HUEY Phase C underway: multiple NF4 candidates + executable verification vs. single-pass BF16.</span>
+        </div>
+        <div class="changelog-row">
+          <span class="changelog-date">Sep 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Phase B: 144-task benchmark found NF4's quality drop (−2.8pp vs. BF16) statistically inconclusive, but real in specific failure modes on replay.</span>
+        </div>
+        <div class="changelog-row">
+          <span class="changelog-date">Sep 2026</span>
+          <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Started HUEY: a model lab quantizing Qwen3.5-9B (BF16/INT8/NF4) on a single RTX 3090 to recover GPU memory for inference-time scaling.</span>
+        </div>
         <div class="changelog-row">
           <span class="changelog-date">Jun 2026</span>
           <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Site launched. Building in public from here.</span>
@@ -1148,7 +1173,117 @@ footer p {
         </div>
         <div class="open-q" style="border-left-color:var(--accent);">
           <span class="open-q-label">Next experiment</span>
-          Quantization and optimization of larger models — running something like Llama 3 70B or Qwen 72B locally via GGUF/AWQ quantization. The question isn't whether bigger models are better (they are) — it's whether they can run at acceptable speed on available hardware once quantized, and what the quality/compression tradeoff looks like at different bit widths.
+          Spun this off into its own project — <strong>HUEY</strong> — a dedicated model lab testing quantization (BF16 vs. INT8 vs. NF4) and inference-time scaling on a single RTX 3090. Full build log below.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HUEY BUILD LOG -->
+    <div class="tinted tinted-blue" style="margin-top: 1rem;">
+      <div class="build-log-header">
+        <span class="build-log-title">HUEY model lab · build log</span>
+        <span class="build-log-status">active build</span>
+      </div>
+
+      <div class="build-log">
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">The question</p>
+
+        <blockquote style="margin:0 0 1.25rem;">
+          <p>Given a fixed 24GB GPU, how much reliable agent capability can be recovered by optimizing a model's memory footprint — then spending the recovered compute on better inference?</p>
+        </blockquote>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Three phases</p>
+
+        <div class="arch-layers">
+          <div class="arch-layer arch-layer-blue">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Phase A · Baseline sweep</span>
+              <span class="arch-layer-tech">Qwen3.5-9B · BF16 / INT8 / NF4</span>
+            </div>
+            <div class="arch-layer-desc">Inventoried the workstation, picked Qwen3.5-9B (8.95B params) as the base model, and ran a 23-task benchmark across three precisions. NF4 used ~48% less peak GPU memory than BF16 and decoded ~16% faster — promising, but the benchmark was too small to trust on quality.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-blue">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Phase B · Rigor pass</span>
+              <span class="arch-layer-tech">144-task benchmark · paired statistics</span>
+            </div>
+            <div class="arch-layer-desc">Rebuilt the benchmark to 144 held-out tasks with objective scoring — unit tests, JSON Schema, exact-match oracles — instead of trusting a model to grade its own output. NF4 accuracy came in 2.8 points below BF16, but the 95% confidence interval crossed zero: not statistically clear either way. The real finding was memory — NF4 left room for ~16 concurrent candidates vs. ~4 for BF16.</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer arch-layer-teal">
+            <div class="arch-layer-top">
+              <span class="arch-layer-name">Phase C · Inference-time scaling</span>
+              <span class="arch-layer-tech">candidate generation · executable verification</span>
+            </div>
+            <div class="arch-layer-desc">Current phase. If one NF4 pass is slightly worse than one BF16 pass, can several NF4 candidates plus objective verification (unit tests, schema checks, deterministic oracles) beat BF16 anyway? Measuring pass@N, verifier false-accept rate, and the latency/VRAM cost of getting there.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Numbers so far (16K context)</p>
+
+        <div class="decisions-grid">
+          <div class="decision-card">
+            <div class="decision-label">Peak GPU memory</div>
+            <div class="decision-text">BF16: 21.05 GiB · NF4: 11.50 GiB — NF4 leaves most of a 24GB card free for other work.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Decode speed</div>
+            <div class="decision-text">NF4 ran 13–20% faster than BF16 across 2K–16K context.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Concurrent candidates</div>
+            <div class="decision-text">BF16: ~4 · NF4: ~16 — roughly 4× the candidate-generation headroom on the same GPU.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Quality (144-task benchmark)</div>
+            <div class="decision-text">NF4 −2.8 points vs. BF16 (95% CI: −6.9 to +1.4) — not conclusively worse, but specific regressions in string handling reproduced on replay.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Design decisions</p>
+
+        <div class="decisions-grid">
+          <div class="decision-card">
+            <div class="decision-label">Why objective verification</div>
+            <div class="decision-text">Prefer unit tests, exact-match, JSON Schema, and deterministic checks over letting a model grade its own answers — especially for an agent where a wrongly accepted candidate could go on to execute an action.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Why separate semantic from formatting</div>
+            <div class="decision-text">Early NF4 "wins" turned out to be formatting differences, not better reasoning. Rescored everything so markdown fences and cosmetic style stop dominating the result.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Why re-order the roadmap</div>
+            <div class="decision-text">Vocabulary pruning was next on paper, but Phase B raised a bigger unanswered question: does the memory NF4 already recovered convert into real reliability? Moved verification ahead of further compression.</div>
+          </div>
+          <div class="decision-card">
+            <div class="decision-label">Why deprioritize INT8</div>
+            <div class="decision-text">Stuck around 14 tok/s on this stack — no memory or speed edge over BF16 or NF4, so not worth the added complexity right now.</div>
+          </div>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Open questions</p>
+
+        <div class="open-q">
+          <span class="open-q-label">Unresolved</span>
+          Can verified NF4 inference-time scaling (multiple candidates + a verifier) actually beat single-sample BF16 on one RTX 3090? That's the central Phase C experiment, still running.
+        </div>
+        <div class="open-q">
+          <span class="open-q-label">Considering</span>
+          NF4 doesn't have to win as a single-inference model to win as a generator — it's plausible that BF16 alone beats NF4 alone, while verified NF4×5 beats BF16 alone. That split is the interesting result if it holds up.
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;margin-top:1.25rem;">What's next</p>
+
+        <div class="open-q" style="border-left-color:var(--text3);">
+          <span class="open-q-label" style="color:var(--text3);">Where it stands</span>
+          BF16 N=1 is still the stronger single-inference reference. NF4 isn't a free win on its own — it's a trade: a small, not-fully-resolved quality cost for roughly double the speed, half the memory, and 4× the candidate budget.
+        </div>
+        <div class="open-q" style="border-left-color:var(--accent);">
+          <span class="open-q-label">Working hypothesis</span>
+          Use NF4's efficiency to generate more attempts, and let an executable verifier decide which attempt earns the right to act — turning a fixed 24GB GPU into a systems-design problem rather than a pure modeling one. The whole experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously, with one hard rule: never touch files or run destructive operations outside its own workspace.
         </div>
 
       </div>
@@ -1199,135 +1334,7 @@ footer p {
           </div>
         </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Bugs found mid-build</p>
-
-        <div class="decisions-grid">
-          <div class="decision-card">
-            <div class="decision-label" style="color:#993C1D;">Substring synonym collision</div>
-            <div class="decision-text">"ai" matched inside "air", "maintenance", "training". Plain string .replace() corrupted queries silently. Fixed with word-boundary regex — <code style="font-family:var(--mono-font);font-size:0.75rem;">\bai\b</code> instead of "ai".</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label" style="color:#993C1D;">Stopwords eating intent</div>
-            <div class="decision-text">"like", "enjoy", "love", "want" — the most natural ways a user expresses preference — were all in the stopword list. Stripped silently. "I do not like welding" became identical to "I like welding".</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label" style="color:#993C1D;">Match % always 100% for rank 1</div>
-            <div class="decision-text">Score normalised to top result, so rank 1 always showed 100% — even a weak match. A zero-match query produced NaN%. Replaced with qualitative labels: Strong / Good / Possible.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label" style="color:#993C1D;">MMR diversity over-inflated</div>
-            <div class="decision-text">Inter-document similarity used bigrams in Jaccard, making all careers look more distinct than they were. MMR under-penalised similarity. Fixed: Jaccard on unigrams only.</div>
-          </div>
-        </div>
-
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Architecture decision</p>
-
-        <div class="open-q" style="border-left-color:var(--teal);">
-          <span class="open-q-label" style="color:var(--teal);">Browser vs backend</span>
-          Browser mode (BM25 + synonym expansion) is a working offline fallback — no API key, no server needed. Backend mode (sentence-transformers via FastAPI) is the real thing. The right production path: HTML is a UI shell, the backend does all matching, browser JS shows a clear "semantic matching unavailable" warning rather than silently degrading.
-        </div>
-
-      </div>
-    </div>
-  </section>
-  <section id="about">
-    <div class="sec-header">
-      <span class="sec-label">About</span>
-      <div class="sec-line"></div>
-    </div>
-
-    <div class="tinted tinted-neutral">
-      <p style="font-size:0.95rem;color:var(--text2);line-height:1.8;margin-bottom:1.25rem;">
-        I'm Makaato Serumaga — a Machine Learning Engineer based in London, Ontario. I spend most of my time building, debugging, and thinking about ML systems. I write here about things I'm working on and things I'm working through.
-      </p>
-      <p style="font-size:0.95rem;color:var(--text2);line-height:1.8;margin-bottom:1.25rem;">
-        Outside of ML, I read a lot — across tech, history, and ideas. I've developed a side interest in physics, not at any expert level, but because it keeps offering useful lenses for thinking about learning systems and complexity. There's probably an essay in that eventually.
-      </p>
-      <p style="font-size:0.95rem;color:var(--text2);line-height:1.8;margin-bottom:1.5rem;">
-        This site is where I build in public. Finished things and unfinished things both live here.
-      </p>
-      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-        <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Say hello</a>
-        <a href="https://github.com/makaato53" class="btn btn-ghost">GitHub ↗</a>
-        <a href="https://www.linkedin.com/in/makaato-serumaga-5610a9356/" class="btn btn-ghost">LinkedIn ↗</a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <p>Makaato Serumaga · Machine Learning Engineer</p>
-  <div class="footer-links">
-    <a href="https://github.com/makaato53">GitHub</a>
-    <a href="https://www.linkedin.com/in/makaato-serumaga-5610a9356/">LinkedIn</a>
-    <a href="mailto:makaato.serumaga@gmail.com">Email</a>
-  </div>
-</footer>
-
-<script>
-/* ── PARTICLE FIELD ────────────────────── */
-(function () {
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles, animId;
-  const N = 55;
-  const MAX_DIST = 130;
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function isDark() {
-    return document.documentElement.getAttribute('data-theme') === 'dark';
-  }
-
-  function particleColor(alpha) {
-    return isDark()
-      ? `rgba(93,168,232,${alpha})`
-      : `rgba(24,95,165,${alpha})`;
-  }
-
-  function initParticles() {
-    particles = Array.from({ length: N }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 1.4 + 0.5,
-    }));
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    for (let i = 0; i < N; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0 || p.x > W) p.vx *= -1;
-      if (p.y < 0 || p.y > H) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = particleColor(0.5);
-      ctx.fill();
-
-      for (let j = i + 1; j < N; j++) {
-        const q = particles[j];
-        const dx = p.x - q.x;
-        const dy = p.y - q.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MAX_DIST) {
-          const alpha = (1 - dist / MAX_DIST) * 0.18;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = particleColor(alpha);
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
+        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;te
       }
     }
     animId = requestAnimationFrame(draw);
@@ -1339,7 +1346,7 @@ footer p {
   window.addEventListener('resize', () => { resize(); });
 })();
 
-/* ── THEME TOGGLE ──────────────────────── */
+/* ── THEME TOGGLE ─────────────────────── */
 const html = document.documentElement;
 const btn = document.getElementById('theme-toggle');
 const stored = localStorage.getItem('ms-theme');
