@@ -1,1370 +1,731 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Makaato Serumaga</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Oswald:wght@500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f5f4f0;
-  --bg2: #eceae4;
-  --bg3: #e2e0d8;
-  --surface: #ffffff;
-  --border: rgba(0,0,0,0.08);
-  --border-med: rgba(0,0,0,0.14);
-  --text: #0f0e0c;
-  --text2: #4a4840;
-  --text3: #8a8780;
-  --accent: #185FA5;
-  --accent2: #0C447C;
-  --accent-bg: #E6F1FB;
-  --accent-mid: #85B7EB;
-  --teal: #0F6E56;
-  --teal-bg: #E1F5EE;
-  --teal-mid: #5DCAA5;
-  --heading-font: 'DM Serif Display', Georgia, serif;
-  --body-font: 'Instrument Sans', sans-serif;
-  --mono-font: 'DM Mono', monospace;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --max: 760px;
-  --nav-h: 56px;
-}
-
-[data-theme="dark"] {
-  --bg: #0d0d0b;
-  --bg2: #141412;
-  --bg3: #1c1c19;
-  --surface: #181816;
-  --border: rgba(255,255,255,0.07);
-  --border-med: rgba(255,255,255,0.12);
-  --text: #f0ede6;
-  --text2: #a8a49c;
-  --text3: #605c54;
-  --accent: #5DA8E8;
-  --accent2: #85C0F0;
-  --accent-bg: #0C2440;
-  --accent-mid: #2A6090;
-  --teal: #3DBFA0;
-  --teal-bg: #042820;
-  --teal-mid: #1A7A60;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; font-size: 16px; }
-
-body {
-  font-family: var(--body-font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  transition: background 0.3s, color 0.3s;
-  overflow-x: hidden;
-}
-
-::selection { background: var(--accent-bg); color: var(--accent2); }
-
-/* ── CANVAS ─────────────────────────────── */
-#canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.35;
-}
-
-/* ── NAV ─────────────────────────────────── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.3s;
-}
-
-.nav-logo {
-  font-family: var(--heading-font);
-  font-size: 1.1rem;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: -0.01em;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.75rem;
-  list-style: none;
-}
-
-.nav-links a {
-  font-size: 0.8rem;
-  font-family: var(--mono-font);
-  font-weight: 400;
-  color: var(--text2);
-  text-decoration: none;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--accent); }
-
-.theme-btn {
-  background: none;
-  border: 1px solid var(--border-med);
-  border-radius: 6px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-family: var(--mono-font);
-  font-size: 0.7rem;
-  color: var(--text2);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  transition: all 0.2s;
-}
-
-.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── LAYOUT ──────────────────────────────── */
-main {
-  position: relative;
-  z-index: 1;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: calc(var(--nav-h) + 4rem) 2rem 6rem;
-}
-
-section {
-  margin-bottom: 5rem;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── HERO ────────────────────────────────── */
-.hero { margin-bottom: 5rem; }
-
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--mono-font);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1.25rem;
-}
-
-.hero-eyebrow::before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 1px;
-  background: var(--accent);
-}
-
-.hero h1 {
-  font-family: var(--heading-font);
-  font-size: clamp(2.4rem, 5vw, 3.4rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-  max-width: 620px;
-}
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--accent);
-}
-
-.hero-body {
-  font-size: 1rem;
-  color: var(--text2);
-  line-height: 1.75;
-  max-width: 520px;
-  margin-bottom: 2rem;
-}
-
-.hero-links {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--mono-font);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 8px 16px;
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: all 0.2s;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-
-.btn-primary:hover { background: var(--accent2); }
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text2);
-  border: 1px solid var(--border-med);
-}
-
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── SECTION HEADER ──────────────────────── */
-.sec-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.75rem;
-}
-
-.sec-label {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text3);
-  flex-shrink: 0;
-}
-
-.sec-line {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-.sec-title {
-  font-family: var(--heading-font);
-  font-size: 1.6rem;
-  letter-spacing: -0.01em;
-  color: var(--text);
-  margin-bottom: 0.5rem;
-}
-
-/* ── TINTED BLOCKS ───────────────────────── */
-.tinted {
-  border-radius: var(--radius-lg);
-  padding: 1.5rem 1.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-}
-
-.tinted-blue {
-  background: var(--accent-bg);
-  border-color: rgba(56, 138, 221, 0.15);
-}
-
-.tinted-teal {
-  background: var(--teal-bg);
-  border-color: rgba(29, 158, 117, 0.15);
-}
-
-.tinted-neutral {
-  background: var(--bg2);
-  border-color: var(--border);
-}
-
-.tinted-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.1rem;
-}
-
-.tinted-title {
-  font-family: var(--mono-font);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.tinted-blue .tinted-title { color: var(--accent); }
-.tinted-teal .tinted-title { color: var(--teal); }
-.tinted-neutral .tinted-title { color: var(--text3); }
-
-.tinted-count {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--text3);
-}
-
-/* ── PROJECT ROWS ────────────────────────── */
-.proj-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0.875rem 0;
-  border-bottom: 1px solid;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.proj-row:hover { opacity: 0.75; }
-.proj-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-.tinted-blue .proj-row { border-color: rgba(56,138,221,0.2); }
-.tinted-teal .proj-row { border-color: rgba(29,158,117,0.2); }
-.tinted-neutral .proj-row { border-color: var(--border); }
-
-.proj-left {}
-
-.proj-name {
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin-bottom: 3px;
-}
-
-.tinted-blue .proj-name { color: var(--accent2); }
-.tinted-teal .proj-name { color: var(--teal); }
-.tinted-neutral .proj-name { color: var(--text); }
-
-.proj-desc {
-  font-size: 0.8rem;
-  color: var(--text2);
-  line-height: 1.4;
-  max-width: 440px;
-}
-
-.proj-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-.proj-year {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--text3);
-}
-
-.proj-tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.tag {
-  font-family: var(--mono-font);
-  font-size: 0.63rem;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: 4px;
-  border: 1px solid;
-}
-
-.tinted-blue .tag { border-color: var(--accent-mid); color: var(--accent); }
-.tinted-teal .tag { border-color: var(--teal-mid); color: var(--teal); }
-.tinted-neutral .tag { border-color: var(--border-med); color: var(--text3); }
-
-/* ── BOOKS ───────────────────────────────── */
-.book-row {
-  display: grid;
-  grid-template-columns: 28px 1fr auto;
-  gap: 12px;
-  align-items: baseline;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(29,158,117,0.2);
-}
-
-.book-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-.book-num {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--teal);
-  font-weight: 500;
-}
-
-.book-title {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--teal);
-}
-
-.book-author {
-  font-size: 0.75rem;
-  color: var(--text3);
-  font-family: var(--mono-font);
-}
-
-/* ── WRITING ROWS ────────────────────────── */
-.writing-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border);
-  text-decoration: none;
-  transition: opacity 0.15s;
-  cursor: pointer;
-}
-
-.writing-row:hover { opacity: 0.7; }
-.writing-row:last-child { border-bottom: none; }
-
-.writing-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-}
-
-.writing-title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.writing-date {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--text3);
-  flex-shrink: 0;
-}
-
-.writing-excerpt {
-  font-size: 0.82rem;
-  color: var(--text2);
-  line-height: 1.5;
-}
-
-.writing-tag {
-  display: inline-block;
-  font-family: var(--mono-font);
-  font-size: 0.62rem;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: var(--accent-bg);
-  color: var(--accent);
-  margin-top: 4px;
-  align-self: flex-start;
-}
-
-/* ── SKILLS GRID ─────────────────────────── */
-.skills-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.skill-block {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-}
-
-.skill-block-label {
-  font-family: var(--mono-font);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 0.625rem;
-}
-
-.skill-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.skill-pill {
-  font-family: var(--mono-font);
-  font-size: 0.7rem;
-  padding: 3px 9px;
-  border-radius: 99px;
-  border: 1px solid var(--border-med);
-  color: var(--text2);
-  background: var(--surface);
-}
-
-/* ── LAB / NOW ───────────────────────────── */
-.lab-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.lab-card {
-  border-radius: var(--radius);
-  padding: 1.25rem;
-}
-
-.lab-card-label {
-  font-family: var(--mono-font);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.lab-card-text {
-  font-size: 0.88rem;
-  line-height: 1.55;
-}
-
-.lab-card-a {
-  background: var(--accent-bg);
-}
-.lab-card-a .lab-card-label { color: var(--accent); }
-.lab-card-a .lab-card-text { color: var(--accent2); }
-
-.lab-card-b {
-  background: var(--teal-bg);
-}
-.lab-card-b .lab-card-label { color: var(--teal); }
-.lab-card-b .lab-card-text { color: var(--teal); }
-
-.lab-card-c {
-  background: var(--bg3);
-  grid-column: 1 / -1;
-}
-.lab-card-c .lab-card-label { color: var(--text3); }
-.lab-card-c .lab-card-text { color: var(--text2); }
-
-/* ── BLOCKQUOTE ──────────────────────────── */
-blockquote {
-  border-left: 3px solid var(--accent);
-  border-radius: 0;
-  padding: 0.875rem 1.25rem;
-  margin: 1.5rem 0;
-}
-
-blockquote p {
-  font-family: var(--heading-font);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--text);
-  line-height: 1.5;
-  margin-bottom: 0.375rem;
-}
-
-blockquote cite {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--text3);
-  font-style: normal;
-}
-
-/* ── CHANGELOG ───────────────────────────── */
-.changelog-row {
-  display: grid;
-  grid-template-columns: 90px 1fr;
-  gap: 1rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.85rem;
-}
-
-.changelog-row:last-child { border-bottom: none; }
-
-.changelog-date {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--text3);
-  padding-top: 2px;
-}
-
-.changelog-entry { color: var(--text2); line-height: 1.5; }
-
-.changelog-badge {
-  display: inline-block;
-  font-family: var(--mono-font);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  padding: 1px 6px;
-  border-radius: 3px;
-  margin-right: 6px;
-  vertical-align: middle;
-}
-
-.badge-new { background: var(--accent-bg); color: var(--accent); }
-.badge-wip { background: #FAEEDA; color: #854F0B; }
-.badge-fix { background: var(--teal-bg); color: var(--teal); }
-
-[data-theme="dark"] .badge-wip { background: #2A1E08; color: #EF9F27; }
-
-/* ── BUILD LOG ───────────────────────────── */
-.build-log {
-  margin-top: 1rem;
-}
-
-.build-log-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.build-log-title {
-  font-family: var(--mono-font);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.build-log-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--teal);
-}
-
-.build-log-status::before {
-  content: '';
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--teal);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-.arch-layers {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 1.25rem;
-}
-
-.arch-layer {
-  border-radius: var(--radius);
-  padding: 0.875rem 1rem;
-  border: 1px solid transparent;
-}
-
-.arch-layer-blue {
-  background: var(--accent-bg);
-  border-color: rgba(56,138,221,0.2);
-}
-
-.arch-layer-teal {
-  background: var(--teal-bg);
-  border-color: rgba(29,158,117,0.2);
-}
-
-.arch-layer-neutral {
-  background: var(--bg3);
-  border-color: var(--border);
-}
-
-.arch-layer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 4px;
-}
-
-.arch-layer-name {
-  font-family: var(--mono-font);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
-.arch-layer-blue .arch-layer-name { color: var(--accent2); }
-.arch-layer-teal .arch-layer-name { color: var(--teal); }
-.arch-layer-neutral .arch-layer-name { color: var(--text2); }
-
-.arch-layer-tech {
-  font-family: var(--mono-font);
-  font-size: 0.65rem;
-  color: var(--text3);
-}
-
-.arch-layer-desc {
-  font-size: 0.8rem;
-  line-height: 1.5;
-}
-
-.arch-layer-blue .arch-layer-desc { color: var(--accent2); opacity: 0.85; }
-.arch-layer-teal .arch-layer-desc { color: var(--teal); opacity: 0.85; }
-.arch-layer-neutral .arch-layer-desc { color: var(--text2); }
-
-.arch-arrow {
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--text3);
-  line-height: 1;
-  margin: -2px 0;
-}
-
-.decisions-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 1.25rem;
-}
-
-.decision-card {
-  border-radius: var(--radius);
-  padding: 0.875rem;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-}
-
-.decision-label {
-  font-family: var(--mono-font);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 4px;
-}
-
-.decision-text {
-  font-size: 0.8rem;
-  color: var(--text2);
-  line-height: 1.5;
-}
-
-.open-q {
-  font-size: 0.82rem;
-  color: var(--text2);
-  line-height: 1.6;
-  padding: 0.75rem 1rem;
-  background: var(--bg2);
-  border-radius: var(--radius);
-  border-left: 3px solid var(--accent);
-  margin-bottom: 6px;
-}
-
-.open-q-label {
-  font-family: var(--mono-font);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 3px;
-}
-
-footer {
-  position: relative;
-  z-index: 1;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 2rem 2rem 3rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-footer p {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--text3);
-}
-
-.footer-links {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.footer-links a {
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--text3);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(--accent); }
-
-/* ── MOBILE ──────────────────────────────── */
-@media (max-width: 600px) {
-  nav { padding: 0 1.25rem; }
-  main { padding: calc(var(--nav-h) + 2.5rem) 1.25rem 4rem; }
-  .hero h1 { font-size: 2rem; }
-  .skills-grid, .lab-grid { grid-template-columns: 1fr; }
-  .lab-card-c { grid-column: 1; }
-  .nav-links { gap: 1rem; }
-  .nav-links li:nth-child(n+3) { display: none; }
-  footer { padding: 1.5rem 1.25rem 2.5rem; flex-direction: column; align-items: flex-start; }
+:root{
+  --font-mono:'DM Mono',monospace;
+  --font-body:'Instrument Sans',sans-serif;
+  --font-blueprint:'Oswald',sans-serif;
+  --font-mesh:'Sora',sans-serif;
+  --radius:6px;
+  --radius-lg:10px;
+  --max:800px;
+  --nav-h:52px;
+  --line-soft:rgba(255,255,255,0.08);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:#05070a;
+  color:#e8e6e0;
+  font-family:var(--font-body);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+::selection{ background:rgba(255,255,255,0.18); }
+
+img{ max-width:100%; }
+
+/* ── NAV ─────────────────────────── */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:var(--nav-h);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 1.75rem;
+  background:var(--n-bg);
+  border-bottom:1px solid var(--n-line);
+  transition:background .4s ease, color .4s ease, border-color .4s ease;
+  backdrop-filter:blur(6px);
+}
+nav[data-zone="terminal"]{ --n-bg:rgba(5,8,10,0.88); --n-ink:#d7ffe4; --n-accent:#3dff96; --n-line:rgba(61,255,150,0.25); }
+nav[data-zone="mesh"]{ --n-bg:rgba(8,7,12,0.88); --n-ink:#ece9f5; --n-accent:#8b6bff; --n-line:rgba(139,107,255,0.3); }
+nav[data-zone="blueprint"]{ --n-bg:rgba(11,28,48,0.9); --n-ink:#dce8f4; --n-accent:#5fc9ff; --n-line:rgba(95,201,255,0.3); }
+.nav-logo{
+  font-family:var(--font-mono); font-weight:500; font-size:0.95rem;
+  color:var(--n-accent); text-decoration:none; letter-spacing:0.02em;
+  transition:color .4s ease;
+}
+.nav-links{ display:flex; align-items:center; gap:1.6rem; list-style:none; }
+.nav-links a{
+  font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--n-ink); opacity:0.72; text-decoration:none;
+  transition:opacity .2s ease, color .4s ease;
+}
+.nav-links a:hover{ opacity:1; color:var(--n-accent); }
+
+/* ── ZONES ───────────────────────── */
+.zone{ position:relative; overflow:hidden; }
+.zone-inner{
+  position:relative; z-index:2;
+  max-width:var(--max); margin:0 auto;
+  padding:calc(var(--nav-h) + 3.5rem) 1.5rem 4rem;
+}
+.zone-inner.no-top-pad{ padding-top:4rem; }
+
+.zone--terminal{
+  background:#05080a; color:#d7ffe4; font-family:var(--font-mono);
+  --ink:#d7ffe4; --dim:#4f8f6c; --accent:#3dff96; --accent2:#8dffc2;
+  --tint-border:rgba(61,255,150,0.35); --tint-bg:rgba(61,255,150,0.06);
+}
+.zone--mesh{
+  background:#08070c; color:#ece9f5; font-family:var(--font-body);
+  --ink:#ece9f5; --dim:#948da8; --accent:#8b6bff; --accent2:#b39dff;
+  --tint-border:rgba(139,107,255,0.35); --tint-bg:rgba(139,107,255,0.07);
+}
+.zone--blueprint{
+  background:#0b1c30; color:#dce8f4; font-family:var(--font-body);
+  --ink:#dce8f4; --dim:#84a0ba; --accent:#5fc9ff; --accent2:#ffb454;
+  --tint-border:rgba(95,201,255,0.35); --tint-bg:rgba(95,201,255,0.06);
+}
+
+.seam{ position:relative; height:clamp(80px,12vh,180px); z-index:1; }
+.seam--tm{ background:linear-gradient(to bottom,#05080a,#08070c); }
+.seam--mb{ background:linear-gradient(to bottom,#08070c,#0b1c30); }
+
+/* ── SHARED COMPONENTS ───────────── */
+.eyebrow{
+  display:inline-flex; align-items:center; gap:0.55rem;
+  font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:1.1rem;
+}
+.eyebrow::before{ content:""; width:20px; height:1px; background:var(--accent); }
+
+h1.hero-name{
+  font-size:clamp(2.1rem,5vw,3rem); line-height:1.1; letter-spacing:-0.01em;
+  color:var(--ink); margin-bottom:0.9rem;
+}
+.zone--mesh h1.hero-name, .zone--blueprint h1.hero-name{ font-family:var(--font-mesh); font-weight:700; }
+.zone--blueprint h1.hero-name{ font-family:var(--font-blueprint); text-transform:uppercase; font-weight:600; letter-spacing:0.01em; }
+
+.tagline{ font-size:1.05rem; color:var(--ink); margin-bottom:0.9rem; max-width:36ch; }
+.lead{ font-size:0.92rem; color:var(--dim); max-width:46ch; margin-bottom:1.75rem; line-height:1.7; }
+
+.links{ display:flex; gap:0.7rem; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:0.4rem;
+  font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.05em; text-transform:uppercase;
+  padding:8px 15px; border-radius:var(--radius); text-decoration:none; cursor:pointer;
+  transition:all .2s ease; border:1px solid transparent;
+}
+.btn-primary{ background:var(--accent); color:#05080a; }
+.btn-primary:hover{ background:var(--accent2); }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--tint-border); }
+.btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+.cursor{
+  display:inline-block; width:0.5em; height:1em; background:var(--accent);
+  vertical-align:-0.15em; margin-left:3px; animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+.sec-head{ display:flex; align-items:baseline; gap:1rem; margin-bottom:1.85rem; }
+.sec-head .label{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); white-space:nowrap; }
+.zone--terminal .sec-head .label::before{ content:"$ "; color:var(--accent); }
+.sec-head .rule{ flex:1; height:1px; background:var(--dim); opacity:0.3; }
+
+.cluster-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:0.9rem; }
+.cluster-title{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); opacity:0.85; }
+.cluster-count{ font-family:var(--font-mono); font-size:0.66rem; color:var(--dim); }
+
+/* project rows */
+.proj{ display:flex; justify-content:space-between; gap:1.5rem; padding:1.15rem 0; border-bottom:1px solid var(--line-soft); flex-wrap:wrap; }
+.proj:last-child{ border-bottom:none; }
+.proj-left{ flex:1; min-width:220px; }
+.proj-name{ font-size:0.96rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+.badge{ font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.06em; padding:2px 7px; border-radius:3px; border:1px solid var(--tint-border); color:var(--accent); margin-left:7px; vertical-align:middle; }
+.proj-desc{ font-size:0.82rem; color:var(--dim); line-height:1.55; max-width:480px; }
+.proj-right{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+.proj-year{ font-family:var(--font-mono); font-size:0.66rem; color:var(--dim); }
+.proj-tags{ display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
+.tag{ font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.03em; padding:2px 7px; border-radius:3px; border:1px solid var(--tint-border); color:var(--dim); }
+
+.card{ border:1px solid var(--tint-border); background:var(--tint-bg); border-radius:var(--radius-lg); padding:1.25rem 1.4rem; }
+.card + .card{ margin-top:1rem; }
+.two-col{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.card-title{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.04em; font-weight:500; color:var(--accent); margin-bottom:0.5rem; text-transform:uppercase; }
+.card-body{ font-size:0.82rem; color:var(--dim); line-height:1.6; }
+
+/* skills */
+.skill-groups{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1.75rem; }
+.skill-group-title{ font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--dim); margin-bottom:0.7rem; }
+.pills{ display:flex; flex-wrap:wrap; gap:6px; }
+.pill{ font-family:var(--font-mono); font-size:0.68rem; padding:4px 10px; border-radius:20px; border:1px solid var(--tint-border); color:var(--ink); opacity:0.85; }
+
+/* lab now */
+.lab-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-bottom:2.5rem; }
+
+/* changelog */
+.changelog-row{ display:flex; gap:1.1rem; padding:0.7rem 0; border-bottom:1px solid var(--line-soft); font-size:0.82rem; }
+.changelog-row:last-child{ border-bottom:none; }
+.changelog-date{ font-family:var(--font-mono); font-size:0.66rem; color:var(--dim); flex-shrink:0; width:64px; padding-top:2px; }
+.changelog-entry{ color:var(--dim); line-height:1.55; }
+.changelog-badge{ font-family:var(--font-mono); font-size:0.58rem; letter-spacing:0.05em; text-transform:uppercase; padding:1px 6px; border-radius:3px; margin-right:8px; }
+.badge-wip{ background:rgba(255,180,84,0.15); color:#ffb454; }
+.badge-new{ background:var(--tint-bg); color:var(--accent); }
+.badge-fix{ background:rgba(255,255,255,0.08); color:var(--dim); }
+
+/* build log */
+.buildlog{ margin-top:3rem; }
+.buildlog-head{ display:flex; align-items:center; gap:0.9rem; margin-bottom:1.6rem; flex-wrap:wrap; }
+.buildlog-title{ font-family:var(--font-mesh); font-weight:600; font-size:1.15rem; color:var(--ink); }
+.zone--blueprint .buildlog-title{ font-family:var(--font-blueprint); text-transform:uppercase; letter-spacing:0.01em; }
+.buildlog-status{ font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); padding:2px 9px; border:1px solid var(--tint-border); border-radius:20px; }
+.subhead{ font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin:2rem 0 1rem; }
+
+.layers{ display:flex; flex-direction:column; }
+.layer{ border:1px solid var(--tint-border); background:var(--tint-bg); border-radius:var(--radius-lg); padding:1.1rem 1.3rem; }
+.layer-arrow{ text-align:center; color:var(--dim); font-family:var(--font-mono); padding:6px 0; opacity:0.6; }
+.layer-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:6px; margin-bottom:0.5rem; }
+.layer-name{ font-weight:600; color:var(--ink); font-size:0.9rem; }
+.layer-tech{ font-family:var(--font-mono); font-size:0.62rem; color:var(--dim); }
+.layer-desc{ font-size:0.8rem; color:var(--dim); line-height:1.6; }
+
+.decisions-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.9rem; }
+.decision-card{ border:1px solid var(--line-soft); border-radius:var(--radius); padding:0.95rem 1.1rem; }
+.decision-title{ font-family:var(--font-mono); font-size:0.64rem; letter-spacing:0.05em; color:var(--accent); margin-bottom:0.45rem; }
+.decision-body{ font-size:0.78rem; color:var(--dim); line-height:1.55; }
+
+.stats-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.9rem; }
+.stat-card{ border:1px solid var(--tint-border); background:var(--tint-bg); border-radius:var(--radius); padding:0.95rem 1.1rem; }
+.stat-label{ font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--dim); margin-bottom:0.4rem; }
+.stat-body{ font-size:0.8rem; color:var(--ink); line-height:1.5; }
+
+.openq-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.9rem; }
+.openq-card{ border-left:2px solid var(--accent); padding-left:0.95rem; }
+.openq-label{ font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); margin-bottom:0.4rem; }
+.openq-body{ font-size:0.8rem; color:var(--dim); line-height:1.55; }
+
+.quote{ font-size:1rem; line-height:1.65; color:var(--ink); border-left:2px solid var(--accent); padding-left:1.1rem; margin-bottom:2rem; max-width:60ch; }
+
+/* writing */
+.writing-list{ display:flex; flex-direction:column; gap:1.5rem; }
+.writing-item{ padding-bottom:1.5rem; border-bottom:1px solid var(--line-soft); }
+.writing-item:last-child{ border-bottom:none; padding-bottom:0; }
+.writing-head{ display:flex; align-items:baseline; gap:0.8rem; flex-wrap:wrap; margin-bottom:0.5rem; }
+.writing-title{ font-family:var(--font-blueprint); font-size:1.1rem; font-weight:600; color:var(--ink); }
+.writing-status{ font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--accent2); }
+.writing-desc{ font-size:0.85rem; color:var(--dim); line-height:1.6; max-width:60ch; margin-bottom:0.6rem; }
+
+/* books */
+.book-list-title{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.9rem; }
+.book-list-title .name{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); }
+.book-list-title .count{ font-family:var(--font-mono); font-size:0.64rem; color:var(--dim); }
+.book-row{ display:grid; grid-template-columns:26px 1fr auto; gap:12px; align-items:baseline; padding:0.55rem 0; border-bottom:1px solid var(--line-soft); }
+.book-row:last-child{ border-bottom:none; }
+.book-num{ font-family:var(--font-mono); font-size:0.64rem; color:var(--accent); }
+.book-title{ font-size:0.85rem; color:var(--ink); }
+.book-author{ font-family:var(--font-mono); font-size:0.68rem; color:var(--dim); text-align:right; }
+.book-block{ margin-bottom:2.2rem; }
+
+.dim-line{ display:flex; align-items:center; gap:10px; margin:0.4rem 0 1.6rem; font-family:var(--font-mono); font-size:0.6rem; color:var(--accent2); }
+.dim-line .seg{ flex:1; height:1px; background:var(--accent2); position:relative; }
+.dim-line .seg::before,.dim-line .seg::after{ content:""; position:absolute; top:-3px; width:1px; height:7px; background:var(--accent2); }
+.dim-line .seg::before{ left:0; } .dim-line .seg::after{ right:0; }
+
+/* ── TERMINAL zone flourishes ─────── */
+.zone--terminal .scan{ position:absolute; inset:0; z-index:1; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(61,255,150,0.035) 0 1px, transparent 1px 3px); }
+.zone--terminal .vig{ position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at 50% 30%, transparent 55%, rgba(0,0,0,0.45) 100%); }
+
+/* ── BLUEPRINT zone flourishes ─────── */
+.zone--blueprint{
+  background-image:
+    repeating-linear-gradient(0deg, rgba(200,225,255,0.05) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(90deg, rgba(200,225,255,0.05) 0 1px, transparent 1px 26px),
+    linear-gradient(#0b1c30,#0b1c30);
+}
+.zone--blueprint .corner{ position:absolute; z-index:2; font-family:var(--font-mono); font-size:14px; color:var(--dim); line-height:1; opacity:0.7; }
+.zone--blueprint .corner.tl{ top:calc(var(--nav-h) + 14px); left:14px; }
+.zone--blueprint .corner.tr{ top:calc(var(--nav-h) + 14px); right:14px; }
+.titleblock{ border:1px solid var(--dim); display:inline-block; padding:6px 10px; font-family:var(--font-mono); font-size:0.58rem; line-height:1.6; color:var(--dim); margin-top:2.5rem; }
+
+/* ── MESH zone canvas ─────────────── */
+.zone--mesh canvas{ position:absolute; inset:0; z-index:1; width:100%; height:100%; display:block; pointer-events:none; }
+
+/* ── reveal ────────────────────────── */
+.reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+footer{
+  background:#0b1c30; text-align:center; padding:2.5rem 1.5rem 3rem;
+  font-family:var(--font-mono); font-size:0.7rem; color:#84a0ba; letter-spacing:0.04em;
+}
+
+/* ── responsive ───────────────────── */
+@media (max-width:640px){
+  .two-col{ grid-template-columns:1fr; }
+  .proj-right{ align-items:flex-start; }
+  nav{ padding:0 1.1rem; }
+  .nav-links{ gap:1rem; }
 }
 </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
-
-<nav>
-  <a href="#" class="nav-logo">MS</a>
+<nav data-zone="terminal">
+  <a href="#top" class="nav-logo">MS_</a>
   <ul class="nav-links">
     <li><a href="#projects">Projects</a></li>
     <li><a href="#writing">Writing</a></li>
     <li><a href="#lab">Lab</a></li>
     <li><a href="#about">About</a></li>
   </ul>
-  <button class="theme-btn" id="theme-toggle">Dark</button>
 </nav>
 
-<main>
+<main id="top">
 
-  <!-- HERO -->
-  <section class="hero visible">
-    <div class="hero-eyebrow">Machine Learning Engineer</div>
-    <h1>Makaato Serumaga.<br>ML Engineer. Curious about<br><em>most things, certain about very few.</em></h1>
-    <p class="hero-body">
-      ML engineer. I build and ship machine learning systems. This is where I think out loud.
-    </p>
-    <div class="hero-links">
-      <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Contact</a>
-      <a href="https://github.com/makaato53" class="btn btn-ghost">GitHub ↗</a>
-    </div>
-  </section>
+  <!-- ============ ZONE 1 — TERMINAL ============ -->
+  <div class="zone zone--terminal" id="zone-terminal">
+    <div class="scan"></div>
+    <div class="vig"></div>
+    <div class="zone-inner">
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="sec-header">
-      <span class="sec-label">Projects</span>
-      <div class="sec-line"></div>
-    </div>
+      <section id="hero">
+        <div class="eyebrow">whoami</div>
+        <h1 class="hero-name">Makaato Serumaga<span class="cursor"></span></h1>
+        <p class="tagline">ML Engineer. Curious about most things, certain about very few.</p>
+        <p class="lead">ML engineer. I build and ship machine learning systems. This is where I think out loud.</p>
+        <div class="links">
+          <a href="mailto:makaato.serumaga@gmail.com" class="btn btn-primary">Contact</a>
+          <a href="https://github.com/makaato53" class="btn btn-ghost">GitHub ↗</a>
+        </div>
+      </section>
 
-    <div class="tinted tinted-blue">
-      <div class="tinted-header">
-        <span class="tinted-title">ML &amp; AI</span>
-        <span class="tinted-count">4 projects</span>
-      </div>
-
-      <div class="proj-row">
-        <div class="proj-left">
-          <div class="proj-name">HUEY — local model optimization lab <span style="font-family:var(--mono-font);font-size:0.65rem;letter-spacing:0.06em;padding:2px 7px;border-radius:4px;background:var(--accent-bg);color:var(--accent);margin-left:6px;vertical-align:middle;">WIP</span></div>
-          <div class="proj-desc">Systems research on a single 24GB RTX 3090: how much reliable agent capability can be recovered by quantizing a model and spending the freed VRAM on better inference? Quantized Qwen3.5-9B (BF16/INT8/NF4), built a 144-task held-out benchmark with objective scoring to separate real quality loss from formatting noise, and is now testing whether multiple NF4 candidates plus executable verification can beat a single BF16 pass. The experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously. Build log in Lab.</div>
-        </div>
-        <div class="proj-right">
-          <span class="proj-year">2026</span>
-          <div class="proj-tags"><span class="tag">Quantization</span><span class="tag">bitsandbytes</span><span class="tag">CUDA</span><span class="tag">Benchmarking</span></div>
-        </div>
-      </div>
-
-      <div class="proj-row">
-        <div class="proj-left">
-          <div class="proj-name">Semantic career matching engine · COTF</div>
-          <div class="proj-desc">NLP recommendation system built for NGen Canada's Careers of the Future platform. Four-stage pipeline: text encoding (title + skills + tags concatenated into one document), cosine similarity in embedding space, MMR re-ranking for diversity, ranked results with match explanations. Browser-mode runs BM25 + synonym expansion offline; backend mode switches to all-MiniLM-L6-v2 via FastAPI. Real bugs found and fixed mid-build — build log in Lab.</div>
-        </div>
-        <div class="proj-right">
-          <span class="proj-year">2025</span>
-          <div class="proj-tags"><span class="tag">Python</span><span class="tag">sentence-transformers</span><span class="tag">FastAPI</span><span class="tag">BM25</span></div>
-        </div>
-      </div>
-
-      <div class="proj-row">
-        <div class="proj-left">
-          <div class="proj-name">AI agent system <span style="font-family:var(--mono-font);font-size:0.65rem;letter-spacing:0.06em;padding:2px 7px;border-radius:4px;background:var(--accent-bg);color:var(--accent);margin-left:6px;vertical-align:middle;">WIP</span></div>
-          <div class="proj-desc">General-purpose multi-agent system built on LangGraph + LiteLLM. Three-layer architecture: LiteLLM routes tasks to the right model (Qwen for code, DeepSeek for reasoning, Gemma for review), LangGraph manages the agent loop and state, ChromaDB + BM25 hybrid retrieval handles memory. RE:PAIR plugin for domain-specific tooling. Build log in the Lab section.</div>
-        </div>
-        <div class="proj-right">
-          <span class="proj-year">2025</span>
-          <div class="proj-tags"><span class="tag">LangGraph</span><span class="tag">LiteLLM</span><span class="tag">ChromaDB</span><span class="tag">Python</span></div>
-        </div>
-      </div>
-
-      <div class="proj-row">
-        <div class="proj-left">
-          <div class="proj-name">ML systems · RE:PAIR</div>
-          <div class="proj-desc">Professional work — details intentionally vague. Recent focus: production-grade ML data infrastructure for large-scale, memory-constrained training — memory-mapped datasets, index-based shuffling instead of full-dataset copies, and systematic benchmarking of storage and access patterns across CPU, GPU, and I/O. Some of it supports biological sequence modeling. More specifics when I can share them.</div>
-        </div>
-        <div class="proj-right">
-          <span class="proj-year">Ongoing</span>
-          <div class="proj-tags"><span class="tag">ML</span><span class="tag">Production</span><span class="tag">Data pipelines</span></div>
-        </div>
-      </div>
+      <section id="about" style="margin-top:4rem;">
+        <div class="sec-head"><span class="label">about</span><span class="rule"></span></div>
+        <p class="lead" style="max-width:58ch;font-size:0.95rem;">I'd rather ship something small and real than talk about something big and theoretical. This site is where the unfinished stuff lives too — the bugs, the dead ends, the parts still in progress. If you want the polished version, my GitHub has cleaner commit histories than my brain does.</p>
+      </section>
 
     </div>
+  </div>
 
-  </section>
+  <div class="seam seam--tm"></div>
 
-  <!-- WRITING -->
-  <section id="writing">
-    <div class="sec-header">
-      <span class="sec-label">Writing</span>
-      <div class="sec-line"></div>
-    </div>
+  <!-- ============ ZONE 2 — MESH ============ -->
+  <div class="zone zone--mesh" id="zone-mesh">
+    <canvas id="meshCanvas"></canvas>
+    <div class="zone-inner no-top-pad">
 
-    <div class="tinted tinted-neutral">
-      <div class="tinted-header">
-        <span class="tinted-title">Essays &amp; notes</span>
-        <span class="tinted-count">essays incoming</span>
-      </div>
+      <section id="projects">
+        <div class="sec-head"><span class="label">projects</span><span class="rule"></span></div>
 
-      <div class="writing-row">
-        <div class="writing-top">
-          <span class="writing-title">Did we build AI to think geometrically because we do?</span>
-          <span class="writing-date">Coming soon</span>
+        <div class="cluster-head">
+          <span class="cluster-title">ML &amp; AI</span>
+          <span class="cluster-count">4 projects</span>
         </div>
-        <div class="writing-excerpt">Why embeddings, attention, and loss landscapes all reduce to geometry — and whether that's a property of intelligence itself or just how minds that evolved to navigate space end up compressing abstract information.</div>
-        <span class="writing-tag">essay</span>
-      </div>
 
-      <div class="writing-row">
-        <div class="writing-top">
-          <span class="writing-title">Quantum mechanics and the future of computing</span>
-          <span class="writing-date">Coming soon</span>
+        <div class="proj reveal">
+          <div class="proj-left">
+            <div class="proj-name">HUEY — local model optimization lab<span class="badge">WIP</span></div>
+            <div class="proj-desc">Systems research on a single 24GB RTX 3090: how much reliable agent capability can be recovered by quantizing a model and spending the freed VRAM on better inference? Quantized Qwen3.5-9B (BF16/INT8/NF4), built a 144-task held-out benchmark with objective scoring to separate real quality loss from formatting noise, and is now testing whether multiple NF4 candidates plus executable verification can beat a single BF16 pass. The experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously. Build log in Lab.</div>
+          </div>
+          <div class="proj-right">
+            <span class="proj-year">2026</span>
+            <div class="proj-tags"><span class="tag">Quantization</span><span class="tag">bitsandbytes</span><span class="tag">CUDA</span><span class="tag">Benchmarking</span></div>
+          </div>
         </div>
-        <div class="writing-excerpt">What qubits, decoherence, and electron spin actually offer computing — and an honest look at where quantum advantage is real vs. where it's still a moonshot.</div>
-        <span class="writing-tag">essay</span>
-      </div>
 
-    </div>
-  </section>
-
-  <!-- READING -->
-  <section id="reading">
-    <div class="sec-header">
-      <span class="sec-label">Reading</span>
-      <div class="sec-line"></div>
-    </div>
-
-    <div class="tinted tinted-teal">
-      <div class="tinted-header">
-        <span class="tinted-title">Currently reading</span>
-        <span class="tinted-count">4 books</span>
-      </div>
-
-      <div class="book-row">
-        <span class="book-num">01</span>
-        <span class="book-title">Saturday</span>
-        <span class="book-author">Ian McEwan</span>
-      </div>
-      <div class="book-row">
-        <span class="book-num">02</span>
-        <span class="book-title">Moby Dick</span>
-        <span class="book-author">Herman Melville</span>
-      </div>
-      <div class="book-row">
-        <span class="book-num">03</span>
-        <span class="book-title">What Is Real?</span>
-        <span class="book-author">Adam Becker</span>
-      </div>
-      <div class="book-row">
-        <span class="book-num">04</span>
-        <span class="book-title">The Idea Factory</span>
-        <span class="book-author">Jon Gertner</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="sec-header">
-      <span class="sec-label">Skills</span>
-      <div class="sec-line"></div>
-    </div>
-
-    <div class="skills-grid">
-      <div class="skill-block">
-        <div class="skill-block-label">ML &amp; modelling</div>
-        <div class="skill-pills">
-          <span class="skill-pill">PyTorch</span>
-          <span class="skill-pill">Transformers</span>
-          <span class="skill-pill">Scikit-learn</span>
-          <span class="skill-pill">HuggingFace</span>
-          <span class="skill-pill">LangGraph</span>
-          <span class="skill-pill">LiteLLM</span>
-          <span class="skill-pill">ChromaDB</span>
-          <span class="skill-pill">Quantization</span>
+        <div class="proj reveal">
+          <div class="proj-left">
+            <div class="proj-name">Semantic career matching engine · COTF</div>
+            <div class="proj-desc">NLP recommendation system built for NGen Canada's Careers of the Future platform. Four-stage pipeline: text encoding (title + skills + tags concatenated into one document), cosine similarity in embedding space, MMR re-ranking for diversity, ranked results with match explanations. Browser-mode runs BM25 + synonym expansion offline; backend mode switches to all-MiniLM-L6-v2 via FastAPI. Real bugs found and fixed mid-build — build log in Lab.</div>
+          </div>
+          <div class="proj-right">
+            <span class="proj-year">2025</span>
+            <div class="proj-tags"><span class="tag">Python</span><span class="tag">sentence-transformers</span><span class="tag">FastAPI</span><span class="tag">BM25</span></div>
+          </div>
         </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-block-label">Infrastructure</div>
-        <div class="skill-pills">
-          <span class="skill-pill">Python</span>
-          <span class="skill-pill">CUDA</span>
-          <span class="skill-pill">NumPy</span>
-          <span class="skill-pill">Docker</span>
-          <span class="skill-pill">Linux</span>
-          <span class="skill-pill">Git</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-block-label">Foundations</div>
-        <div class="skill-pills">
-          <span class="skill-pill">Linear algebra</span>
-          <span class="skill-pill">Statistics</span>
-          <span class="skill-pill">Optimisation</span>
-          <span class="skill-pill">Probability</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-block-label">Currently learning</div>
-        <div class="skill-pills">
-          <span class="skill-pill">Diffusion models</span>
-          <span class="skill-pill">Geometric DL</span>
-          <span class="skill-pill">Rust</span>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- LAB / NOW -->
-  <section id="lab">
-    <div class="sec-header">
-      <span class="sec-label">Lab · Now</span>
-      <div class="sec-line"></div>
-    </div>
+        <div class="proj reveal">
+          <div class="proj-left">
+            <div class="proj-name">AI agent system<span class="badge">WIP</span></div>
+            <div class="proj-desc">General-purpose multi-agent system built on LangGraph + LiteLLM. Three-layer architecture: LiteLLM routes tasks to the right model (Qwen for code, DeepSeek for reasoning, Gemma for review), LangGraph manages the agent loop and state, ChromaDB + BM25 hybrid retrieval handles memory. RE:PAIR plugin for domain-specific tooling. Build log in the Lab section.</div>
+          </div>
+          <div class="proj-right">
+            <span class="proj-year">2025</span>
+            <div class="proj-tags"><span class="tag">LangGraph</span><span class="tag">LiteLLM</span><span class="tag">ChromaDB</span><span class="tag">Python</span></div>
+          </div>
+        </div>
 
-    <div class="lab-grid">
-      <div class="lab-card lab-card-a">
-        <div class="lab-card-label">Currently building</div>
-        <div class="lab-card-text">HUEY — a local-model lab on a single RTX 3090. Just wrapped a 144-task benchmark showing NF4 quantization recovers roughly 50% of GPU memory for a small, statistically inconclusive quality cost. Now testing multiple NF4 candidates plus executable verification against single-pass BF16.</div>
-      </div>
-      <div class="lab-card lab-card-b">
-        <div class="lab-card-label">Thinking about</div>
-        <div class="lab-card-text">Whether model quality and system reliability are actually separable — whether a slightly worse model, given the freed-up memory to generate more attempts and a verifier to check them, can out-perform a better model working alone.</div>
-      </div>
-      <div class="lab-card lab-card-c">
-        <div class="lab-card-label">Changelog</div>
-        <div class="changelog-row">
-          <span class="changelog-date">Sep 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>HUEY Phase C underway: multiple NF4 candidates + executable verification vs. single-pass BF16.</span>
+        <div class="proj reveal">
+          <div class="proj-left">
+            <div class="proj-name">ML systems · RE:PAIR</div>
+            <div class="proj-desc">Professional work — details intentionally vague. Recent focus: production-grade ML data infrastructure for large-scale, memory-constrained training — memory-mapped datasets, index-based shuffling instead of full-dataset copies, and systematic benchmarking of storage and access patterns across CPU, GPU, and I/O. Some of it supports biological sequence modeling. More specifics when I can share them.</div>
+          </div>
+          <div class="proj-right">
+            <span class="proj-year">Ongoing</span>
+            <div class="proj-tags"><span class="tag">ML</span><span class="tag">Production</span><span class="tag">Data pipelines</span></div>
+          </div>
         </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Sep 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Phase B: 144-task benchmark found NF4's quality drop (−2.8pp vs. BF16) statistically inconclusive, but real in specific failure modes on replay.</span>
-        </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Sep 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Started HUEY: a model lab quantizing Qwen3.5-9B (BF16/INT8/NF4) on a single RTX 3090 to recover GPU memory for inference-time scaling.</span>
-        </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Jun 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Site launched. Building in public from here.</span>
-        </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Jun 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Agent system: memory layer architecture settled. Hybrid ChromaDB + BM25 over pure embeddings.</span>
-        </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Jun 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Switched to HTTP API for Ollama — cleaner boundary than Docker socket, more production-like.</span>
-        </div>
-        <div class="changelog-row">
-          <span class="changelog-date">Jun 2026</span>
-          <span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>LangGraph chosen over raw loop: stateful interaction, retries, branching built in.</span>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- AGENT SYSTEM BUILD LOG -->
-    <div class="tinted tinted-blue" style="margin-top: 1rem;">
-      <div class="build-log-header">
-        <span class="build-log-title">Agent system · build log</span>
-        <span class="build-log-status">active build</span>
-      </div>
+      <section id="skills" style="margin-top:4.5rem;">
+        <div class="sec-head"><span class="label">skills</span><span class="rule"></span></div>
+        <div class="skill-groups">
+          <div>
+            <div class="skill-group-title">ML &amp; Modelling</div>
+            <div class="pills"><span class="pill">PyTorch</span><span class="pill">Transformers</span><span class="pill">Scikit-learn</span><span class="pill">HuggingFace</span><span class="pill">LangGraph</span><span class="pill">LiteLLM</span><span class="pill">ChromaDB</span><span class="pill">Quantization</span></div>
+          </div>
+          <div>
+            <div class="skill-group-title">Infrastructure</div>
+            <div class="pills"><span class="pill">Python</span><span class="pill">CUDA</span><span class="pill">NumPy</span><span class="pill">Docker</span><span class="pill">Linux</span><span class="pill">Git</span></div>
+          </div>
+          <div>
+            <div class="skill-group-title">Foundations</div>
+            <div class="pills"><span class="pill">Linear algebra</span><span class="pill">Statistics</span><span class="pill">Optimisation</span><span class="pill">Probability</span></div>
+          </div>
+          <div>
+            <div class="skill-group-title">Currently learning</div>
+            <div class="pills"><span class="pill">Diffusion models</span><span class="pill">Geometric DL</span><span class="pill">Rust</span></div>
+          </div>
+        </div>
+      </section>
 
-      <div class="build-log">
+      <section id="lab" style="margin-top:4.5rem;">
+        <div class="sec-head"><span class="label">lab · now</span><span class="rule"></span></div>
+        <div class="lab-grid">
+          <div class="card reveal">
+            <div class="card-title">Currently building</div>
+            <div class="card-body">HUEY — a local-model lab on a single RTX 3090. Just wrapped a 144-task benchmark showing NF4 quantization recovers roughly 50% of GPU memory for a small, statistically inconclusive quality cost. Now testing multiple NF4 candidates plus executable verification against single-pass BF16.</div>
+          </div>
+          <div class="card reveal">
+            <div class="card-title">Thinking about</div>
+            <div class="card-body">Whether model quality and system reliability are actually separable — whether a slightly worse model, given the freed-up memory to generate more attempts and a verifier to check them, can out-perform a better model working alone.</div>
+          </div>
+        </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Architecture — 3 layers</p>
+        <div class="subhead">Changelog</div>
+        <div>
+          <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>HUEY Phase C underway: multiple NF4 candidates + executable verification vs. single-pass BF16.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Phase B: 144-task benchmark found NF4's quality drop (−2.8pp vs. BF16) statistically inconclusive, but real in specific failure modes on replay.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Started HUEY: a model lab quantizing Qwen3.5-9B (BF16/INT8/NF4) on a single RTX 3090 to recover GPU memory for inference-time scaling.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Site launched. Building in public from here.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Agent system: memory layer architecture settled. Hybrid ChromaDB + BM25 over pure embeddings.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Switched to HTTP API for Ollama — cleaner boundary than Docker socket, more production-like.</span></div>
+          <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>LangGraph chosen over raw loop: stateful interaction, retries, branching built in.</span></div>
+        </div>
 
-        <div class="arch-layers">
-          <div class="arch-layer arch-layer-blue">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Layer 1 · Interface</span>
-              <span class="arch-layer-tech">LiteLLM · Ollama · Web UI</span>
+        <!-- AGENT SYSTEM BUILD LOG -->
+        <div class="buildlog reveal">
+          <div class="buildlog-head">
+            <span class="buildlog-title">Agent system · build log</span>
+            <span class="buildlog-status">active build</span>
+          </div>
+
+          <div class="subhead">Architecture — 3 layers</div>
+          <div class="layers">
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Layer 1 · Interface</span><span class="layer-tech">LiteLLM · Ollama · Web UI</span></div>
+              <div class="layer-desc">LiteLLM as model gateway — routes tasks to the right model. Code → Qwen 2.5. Reasoning → DeepSeek. Review → Gemma. Generation → Llama 3. Local via Ollama, cloud SOTA as fallback. HTTP API not Docker socket.</div>
             </div>
-            <div class="arch-layer-desc">LiteLLM as model gateway — routes tasks to the right model. Code → Qwen 2.5. Reasoning → DeepSeek. Review → Gemma. Generation → Llama 3. Local via Ollama, cloud SOTA as fallback. HTTP API not Docker socket.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-blue">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Layer 2 · Agent runtime</span>
-              <span class="arch-layer-tech">LangGraph · Supervisor pattern</span>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Layer 2 · Agent runtime</span><span class="layer-tech">LangGraph · Supervisor pattern</span></div>
+              <div class="layer-desc">LangGraph manages the loop: task in → agent asks model → model picks tool → Python executes → results loop back → model decides next step → final answer. Supervisor node with tool executor, reviewer, and final. Handles state, retries, branching, memory.</div>
             </div>
-            <div class="arch-layer-desc">LangGraph manages the loop: task in → agent asks model → model picks tool → Python executes → results loop back → model decides next step → final answer. Supervisor node with tool executor, reviewer, and final. Handles state, retries, branching, memory.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-teal">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Layer 3 · Memory (RAG)</span>
-              <span class="arch-layer-tech">ChromaDB · BM25 · sentence-transformers</span>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Layer 3 · Memory (RAG)</span><span class="layer-tech">ChromaDB · BM25 · sentence-transformers</span></div>
+              <div class="layer-desc">Hybrid retrieval: embeddings for semantic/meaning similarity, BM25 for exact terms, config names, filenames, experiment IDs. Query → BM25 search → vector search → fuse results. 4 collections: agent traces, tool results, project docs, task results. Persistent to disk.</div>
             </div>
-            <div class="arch-layer-desc">Hybrid retrieval: embeddings for semantic/meaning similarity, BM25 for exact terms, config names, filenames, experiment IDs. Query → BM25 search → vector search → fuse results. 4 collections: agent traces, tool results, project docs, task results. Persistent to disk.</div>
+          </div>
+
+          <div class="subhead">Design decisions</div>
+          <div class="decisions-grid">
+            <div class="decision-card"><div class="decision-title">Why hybrid retrieval</div><div class="decision-body">Embeddings good at meaning similarity and natural language. BM25 good at exact keywords — config names, file paths, experiment IDs. Neither alone is enough.</div></div>
+            <div class="decision-card"><div class="decision-title">Why LangGraph over raw loop</div><div class="decision-body">Stateful interaction, shared state across nodes, retries and branching built in. Higher abstraction — manage steps not individual calls.</div></div>
+            <div class="decision-card"><div class="decision-title">Why HTTP API for Ollama</div><div class="decision-body">No security risk from Docker socket exposure. Cleaner service boundary. More production-like than daemon access.</div></div>
+            <div class="decision-card"><div class="decision-title">3 generic agents + plugins</div><div class="decision-body">Core agents: repair, geography, general. Domain-specific logic lives in plugins not agents — keeps the core clean and extensible.</div></div>
+          </div>
+
+          <div class="subhead">Open questions</div>
+          <div class="openq-grid">
+            <div class="openq-card"><div class="openq-label">Unresolved</div><div class="openq-body">How much of agent reliability comes from architecture vs prompt quality? Structured-output enforcement helps — ambiguous prompts compound across steps. Still figuring out where to draw that line.</div></div>
+            <div class="openq-card"><div class="openq-label">Considering</div><div class="openq-body">Turbopuffer as vector store replacement for ChromaDB — better for sub-10M vector loads, runs on CPU, 16x compression. ChromaDB system RAM is a hard upper bound at scale.</div></div>
+          </div>
+
+          <div class="subhead">What's next</div>
+          <div class="openq-grid">
+            <div class="openq-card"><div class="openq-label">Conclusion on small models</div><div class="openq-body">Running small local models through LiteLLM was the right call for getting the architecture working — cheap, fast to iterate, no API costs. But the ceiling is low. The reliability problems (hallucinated tool calls, inconsistent structured output, reasoning failures on multi-step tasks) aren't prompting problems. They're model capability problems. Small models aren't the answer for a serious agent system.</div></div>
+            <div class="openq-card"><div class="openq-label">Next experiment</div><div class="openq-body">Spun this off into its own project — <strong>HUEY</strong> — a dedicated model lab testing quantization (BF16 vs. INT8 vs. NF4) and inference-time scaling on a single RTX 3090. Full build log below.</div></div>
           </div>
         </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Design decisions</p>
-
-        <div class="decisions-grid">
-          <div class="decision-card">
-            <div class="decision-label">Why hybrid retrieval</div>
-            <div class="decision-text">Embeddings good at meaning similarity and natural language. BM25 good at exact keywords — config names, file paths, experiment IDs. Neither alone is enough.</div>
+        <!-- HUEY BUILD LOG -->
+        <div class="buildlog reveal">
+          <div class="buildlog-head">
+            <span class="buildlog-title">HUEY model lab · build log</span>
+            <span class="buildlog-status">active build</span>
           </div>
-          <div class="decision-card">
-            <div class="decision-label">Why LangGraph over raw loop</div>
-            <div class="decision-text">Stateful interaction, shared state across nodes, retries and branching built in. Higher abstraction — manage steps not individual calls.</div>
+
+          <blockquote class="quote">Given a fixed 24GB GPU, how much reliable agent capability can be recovered by optimizing a model's memory footprint — then spending the recovered compute on better inference?</blockquote>
+
+          <div class="subhead">Three phases</div>
+          <div class="layers">
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Phase A · Baseline sweep</span><span class="layer-tech">Qwen3.5-9B · BF16 / INT8 / NF4</span></div>
+              <div class="layer-desc">Inventoried the workstation, picked Qwen3.5-9B (8.95B params) as the base model, and ran a 23-task benchmark across three precisions. NF4 used ~48% less peak GPU memory than BF16 and decoded ~16% faster — promising, but the benchmark was too small to trust on quality.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Phase B · Rigor pass</span><span class="layer-tech">144-task benchmark · paired statistics</span></div>
+              <div class="layer-desc">Rebuilt the benchmark to 144 held-out tasks with objective scoring — unit tests, JSON Schema, exact-match oracles — instead of trusting a model to grade its own output. NF4 accuracy came in 2.8 points below BF16, but the 95% confidence interval crossed zero: not statistically clear either way. The real finding was memory — NF4 left room for ~16 concurrent candidates vs. ~4 for BF16.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Phase C · Inference-time scaling</span><span class="layer-tech">candidate generation · executable verification</span></div>
+              <div class="layer-desc">Current phase. If one NF4 pass is slightly worse than one BF16 pass, can several NF4 candidates plus objective verification (unit tests, schema checks, deterministic oracles) beat BF16 anyway? Measuring pass@N, verifier false-accept rate, and the latency/VRAM cost of getting there.</div>
+            </div>
           </div>
-          <div class="decision-card">
-            <div class="decision-label">Why HTTP API for Ollama</div>
-            <div class="decision-text">No security risk from Docker socket exposure. Cleaner service boundary. More production-like than daemon access.</div>
+
+          <div class="subhead">Numbers so far (16K context)</div>
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Peak GPU memory</div><div class="stat-body">BF16: 21.05 GiB · NF4: 11.50 GiB — NF4 leaves most of a 24GB card free for other work.</div></div>
+            <div class="stat-card"><div class="stat-label">Decode speed</div><div class="stat-body">NF4 ran 13–20% faster than BF16 across 2K–16K context.</div></div>
+            <div class="stat-card"><div class="stat-label">Concurrent candidates</div><div class="stat-body">BF16: ~4 · NF4: ~16 — roughly 4× the candidate-generation headroom on the same GPU.</div></div>
+            <div class="stat-card"><div class="stat-label">Quality (144-task benchmark)</div><div class="stat-body">NF4 −2.8 points vs. BF16 (95% CI: −6.9 to +1.4) — not conclusively worse, but specific regressions in string handling reproduced on replay.</div></div>
           </div>
-          <div class="decision-card">
-            <div class="decision-label">3 generic agents + plugins</div>
-            <div class="decision-text">Core agents: repair, geography, general. Domain-specific logic lives in plugins not agents — keeps the core clean and extensible.</div>
+
+          <div class="subhead">Design decisions</div>
+          <div class="decisions-grid">
+            <div class="decision-card"><div class="decision-title">Why objective verification</div><div class="decision-body">Prefer unit tests, exact-match, JSON Schema, and deterministic checks over letting a model grade its own answers — especially for an agent where a wrongly accepted candidate could go on to execute an action.</div></div>
+            <div class="decision-card"><div class="decision-title">Why separate semantic from formatting</div><div class="decision-body">Early NF4 "wins" turned out to be formatting differences, not better reasoning. Rescored everything so markdown fences and cosmetic style stop dominating the result.</div></div>
+            <div class="decision-card"><div class="decision-title">Why re-order the roadmap</div><div class="decision-body">Vocabulary pruning was next on paper, but Phase B raised a bigger unanswered question: does the memory NF4 already recovered convert into real reliability? Moved verification ahead of further compression.</div></div>
+            <div class="decision-card"><div class="decision-title">Why deprioritize INT8</div><div class="decision-body">Stuck around 14 tok/s on this stack — no memory or speed edge over BF16 or NF4, so not worth the added complexity right now.</div></div>
+          </div>
+
+          <div class="subhead">Open questions</div>
+          <div class="openq-grid">
+            <div class="openq-card"><div class="openq-label">Unresolved</div><div class="openq-body">Can verified NF4 inference-time scaling (multiple candidates + a verifier) actually beat single-sample BF16 on one RTX 3090? That's the central Phase C experiment, still running.</div></div>
+            <div class="openq-card"><div class="openq-label">Considering</div><div class="openq-body">NF4 doesn't have to win as a single-inference model to win as a generator — it's plausible that BF16 alone beats NF4 alone, while verified NF4×5 beats BF16 alone. That split is the interesting result if it holds up.</div></div>
+          </div>
+
+          <div class="subhead">What's next</div>
+          <div class="openq-grid">
+            <div class="openq-card"><div class="openq-label">Where it stands</div><div class="openq-body">BF16 N=1 is still the stronger single-inference reference. NF4 isn't a free win on its own — it's a trade: a small, not-fully-resolved quality cost for roughly double the speed, half the memory, and 4× the candidate budget.</div></div>
+            <div class="openq-card"><div class="openq-label">Working hypothesis</div><div class="openq-body">Use NF4's efficiency to generate more attempts, and let an executable verifier decide which attempt earns the right to act — turning a fixed 24GB GPU into a systems-design problem rather than a pure modeling one. The whole experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously, with one hard rule: never touch files or run destructive operations outside its own workspace.</div></div>
           </div>
         </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Open questions</p>
+        <!-- COTF BUILD LOG -->
+        <div class="buildlog reveal">
+          <div class="buildlog-head">
+            <span class="buildlog-title">Semantic career matching · COTF · build log</span>
+            <span class="buildlog-status">shipped</span>
+          </div>
 
-        <div class="open-q">
-          <span class="open-q-label">Unresolved</span>
-          How much of agent reliability comes from architecture vs prompt quality? Structured-output enforcement helps — ambiguous prompts compound across steps. Still figuring out where to draw that line.
-        </div>
-        <div class="open-q">
-          <span class="open-q-label">Considering</span>
-          Turbopuffer as vector store replacement for ChromaDB — better for sub-10M vector loads, runs on CPU, 16x compression. ChromaDB system RAM is a hard upper bound at scale.
+          <div class="subhead">Pipeline — 4 stages</div>
+          <div class="layers">
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Stage 1 · Text encoding</span><span class="layer-tech">sentence-transformers · all-MiniLM-L6-v2</span></div>
+              <div class="layer-desc">Career title, industry description, skills, and tags concatenated into one document string. User input is the query. Browser-mode uses BM25 + synonym expansion offline; backend mode uses real embeddings via FastAPI on a local GPU server.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Stage 2 · Cosine similarity</span><span class="layer-tech">vectors in high-dimensional space</span></div>
+              <div class="layer-desc">Documents and query represented as vectors. Cosine similarity measures the angle between them — 0° is identical meaning, 90° is unrelated. Handles paraphrasing: "I like fixing machines" and "preventive maintenance" end up pointing in roughly the same direction even with no shared words.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Stage 3 · MMR re-ranking</span><span class="layer-tech">Maximal Marginal Relevance</span></div>
+              <div class="layer-desc">Pure cosine similarity clusters top results — all engineering roles if you mention engineering. MMR fixes this: each next result maximises λ × (relevance to query) − (1−λ) × (similarity to already-selected results). λ exposed as a UI slider. Lower λ = more diverse results across industries.</div>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Stage 4 · Results</span><span class="layer-tech">ranked cards with match explanation</span></div>
+              <div class="layer-desc">Cards show match score, NAICS code, skills, education pathways, and a "why this matched" explanation row. Backend mode returns richer explanation strings from the API.</div>
+            </div>
+          </div>
         </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;margin-top:1.25rem;">What's next</p>
-
-        <div class="open-q" style="border-left-color:var(--text3);">
-          <span class="open-q-label" style="color:var(--text3);">Conclusion on small models</span>
-          Running small local models through LiteLLM was the right call for getting the architecture working — cheap, fast to iterate, no API costs. But the ceiling is low. The reliability problems (hallucinated tool calls, inconsistent structured output, reasoning failures on multi-step tasks) aren't prompting problems. They're model capability problems. Small models aren't the answer for a serious agent system.
-        </div>
-        <div class="open-q" style="border-left-color:var(--accent);">
-          <span class="open-q-label">Next experiment</span>
-          Spun this off into its own project — <strong>HUEY</strong> — a dedicated model lab testing quantization (BF16 vs. INT8 vs. NF4) and inference-time scaling on a single RTX 3090. Full build log below.
-        </div>
-
-      </div>
+      </section>
     </div>
+  </div>
 
-    <!-- HUEY BUILD LOG -->
-    <div class="tinted tinted-blue" style="margin-top: 1rem;">
-      <div class="build-log-header">
-        <span class="build-log-title">HUEY model lab · build log</span>
-        <span class="build-log-status">active build</span>
-      </div>
+  <div class="seam seam--mb"></div>
 
-      <div class="build-log">
+  <!-- ============ ZONE 3 — BLUEPRINT ============ -->
+  <div class="zone zone--blueprint" id="zone-blueprint">
+    <span class="corner tl">+</span>
+    <span class="corner tr">+</span>
+    <div class="zone-inner no-top-pad">
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">The question</p>
-
-        <blockquote style="margin:0 0 1.25rem;">
-          <p>Given a fixed 24GB GPU, how much reliable agent capability can be recovered by optimizing a model's memory footprint — then spending the recovered compute on better inference?</p>
-        </blockquote>
-
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Three phases</p>
-
-        <div class="arch-layers">
-          <div class="arch-layer arch-layer-blue">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Phase A · Baseline sweep</span>
-              <span class="arch-layer-tech">Qwen3.5-9B · BF16 / INT8 / NF4</span>
-            </div>
-            <div class="arch-layer-desc">Inventoried the workstation, picked Qwen3.5-9B (8.95B params) as the base model, and ran a 23-task benchmark across three precisions. NF4 used ~48% less peak GPU memory than BF16 and decoded ~16% faster — promising, but the benchmark was too small to trust on quality.</div>
+      <section id="writing">
+        <div class="sec-head"><span class="label">writing</span><span class="rule"></span></div>
+        <div class="cluster-head"><span class="cluster-title">Essays &amp; notes</span><span class="cluster-count">essays incoming</span></div>
+        <div class="writing-list">
+          <div class="writing-item reveal">
+            <div class="writing-head"><span class="writing-title">Did we build AI to think geometrically because we do?</span><span class="writing-status">Coming soon</span></div>
+            <p class="writing-desc">Why embeddings, attention, and loss landscapes all reduce to geometry — and whether that's a property of intelligence itself or just how minds that evolved to navigate space end up compressing abstract information.</p>
+            <span class="tag">essay</span>
           </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-blue">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Phase B · Rigor pass</span>
-              <span class="arch-layer-tech">144-task benchmark · paired statistics</span>
-            </div>
-            <div class="arch-layer-desc">Rebuilt the benchmark to 144 held-out tasks with objective scoring — unit tests, JSON Schema, exact-match oracles — instead of trusting a model to grade its own output. NF4 accuracy came in 2.8 points below BF16, but the 95% confidence interval crossed zero: not statistically clear either way. The real finding was memory — NF4 left room for ~16 concurrent candidates vs. ~4 for BF16.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-teal">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Phase C · Inference-time scaling</span>
-              <span class="arch-layer-tech">candidate generation · executable verification</span>
-            </div>
-            <div class="arch-layer-desc">Current phase. If one NF4 pass is slightly worse than one BF16 pass, can several NF4 candidates plus objective verification (unit tests, schema checks, deterministic oracles) beat BF16 anyway? Measuring pass@N, verifier false-accept rate, and the latency/VRAM cost of getting there.</div>
+          <div class="writing-item reveal">
+            <div class="writing-head"><span class="writing-title">Quantum mechanics and the future of computing</span><span class="writing-status">Coming soon</span></div>
+            <p class="writing-desc">What qubits, decoherence, and electron spin actually offer computing — and an honest look at where quantum advantage is real vs. where it's still a moonshot.</p>
+            <span class="tag">essay</span>
           </div>
         </div>
+        <div class="titleblock">SEC&nbsp;WRITING<br>REV&nbsp;C · NTS</div>
+      </section>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Numbers so far (16K context)</p>
+      <section id="reading" style="margin-top:4.5rem;">
+        <div class="sec-head"><span class="label">reading</span><span class="rule"></span></div>
 
-        <div class="decisions-grid">
-          <div class="decision-card">
-            <div class="decision-label">Peak GPU memory</div>
-            <div class="decision-text">BF16: 21.05 GiB · NF4: 11.50 GiB — NF4 leaves most of a 24GB card free for other work.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Decode speed</div>
-            <div class="decision-text">NF4 ran 13–20% faster than BF16 across 2K–16K context.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Concurrent candidates</div>
-            <div class="decision-text">BF16: ~4 · NF4: ~16 — roughly 4× the candidate-generation headroom on the same GPU.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Quality (144-task benchmark)</div>
-            <div class="decision-text">NF4 −2.8 points vs. BF16 (95% CI: −6.9 to +1.4) — not conclusively worse, but specific regressions in string handling reproduced on replay.</div>
-          </div>
+        <div class="book-block reveal">
+          <div class="book-list-title"><span class="name">Currently reading</span><span class="count">2 books</span></div>
+          <div class="book-row"><span class="book-num">01</span><span class="book-title">Measurement</span><span class="book-author">Paul Lockhart</span></div>
+          <div class="book-row"><span class="book-num">02</span><span class="book-title">Mr. Tompkins in Wonderland</span><span class="book-author">George Gamow</span></div>
         </div>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Design decisions</p>
+        <div class="dim-line"><span class="seg"></span>2026&nbsp;TO&nbsp;DATE<span class="seg"></span></div>
 
-        <div class="decisions-grid">
-          <div class="decision-card">
-            <div class="decision-label">Why objective verification</div>
-            <div class="decision-text">Prefer unit tests, exact-match, JSON Schema, and deterministic checks over letting a model grade its own answers — especially for an agent where a wrongly accepted candidate could go on to execute an action.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Why separate semantic from formatting</div>
-            <div class="decision-text">Early NF4 "wins" turned out to be formatting differences, not better reasoning. Rescored everything so markdown fences and cosmetic style stop dominating the result.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Why re-order the roadmap</div>
-            <div class="decision-text">Vocabulary pruning was next on paper, but Phase B raised a bigger unanswered question: does the memory NF4 already recovered convert into real reliability? Moved verification ahead of further compression.</div>
-          </div>
-          <div class="decision-card">
-            <div class="decision-label">Why deprioritize INT8</div>
-            <div class="decision-text">Stuck around 14 tok/s on this stack — no memory or speed edge over BF16 or NF4, so not worth the added complexity right now.</div>
-          </div>
+        <div class="book-block reveal">
+          <div class="book-list-title"><span class="name">Read this year</span><span class="count">8 books</span></div>
+          <div class="book-row"><span class="book-num">01</span><span class="book-title">Physics and Philosophy</span><span class="book-author">Werner Heisenberg</span></div>
+          <div class="book-row"><span class="book-num">02</span><span class="book-title">Moby Dick</span><span class="book-author">Herman Melville</span></div>
+          <div class="book-row"><span class="book-num">03</span><span class="book-title">God Emperor of Dune</span><span class="book-author">Frank Herbert</span></div>
+          <div class="book-row"><span class="book-num">04</span><span class="book-title">Project Hail Mary</span><span class="book-author">Andy Weir</span></div>
+          <div class="book-row"><span class="book-num">05</span><span class="book-title">Saturday</span><span class="book-author">Ian McEwan</span></div>
+          <div class="book-row"><span class="book-num">06</span><span class="book-title">What Is Real?</span><span class="book-author">Adam Becker</span></div>
+          <div class="book-row"><span class="book-num">07</span><span class="book-title">The Idea Factory</span><span class="book-author">Jon Gertner</span></div>
+          <div class="book-row"><span class="book-num">08</span><span class="book-title">The Maniac</span><span class="book-author">Benjamín Labatut</span></div>
         </div>
+      </section>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Open questions</p>
-
-        <div class="open-q">
-          <span class="open-q-label">Unresolved</span>
-          Can verified NF4 inference-time scaling (multiple candidates + a verifier) actually beat single-sample BF16 on one RTX 3090? That's the central Phase C experiment, still running.
-        </div>
-        <div class="open-q">
-          <span class="open-q-label">Considering</span>
-          NF4 doesn't have to win as a single-inference model to win as a generator — it's plausible that BF16 alone beats NF4 alone, while verified NF4×5 beats BF16 alone. That split is the interesting result if it holds up.
-        </div>
-
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;margin-top:1.25rem;">What's next</p>
-
-        <div class="open-q" style="border-left-color:var(--text3);">
-          <span class="open-q-label" style="color:var(--text3);">Where it stands</span>
-          BF16 N=1 is still the stronger single-inference reference. NF4 isn't a free win on its own — it's a trade: a small, not-fully-resolved quality cost for roughly double the speed, half the memory, and 4× the candidate budget.
-        </div>
-        <div class="open-q" style="border-left-color:var(--accent);">
-          <span class="open-q-label">Working hypothesis</span>
-          Use NF4's efficiency to generate more attempts, and let an executable verifier decide which attempt earns the right to act — turning a fixed 24GB GPU into a systems-design problem rather than a pure modeling one. The whole experiment loop — installing dependencies, running benchmarks, recovering from failures — runs autonomously, with one hard rule: never touch files or run destructive operations outside its own workspace.
-        </div>
-
-      </div>
     </div>
+  </div>
 
-    <!-- COTF BUILD LOG -->
-    <div class="tinted tinted-teal" style="margin-top: 1rem;">
-      <div class="build-log-header">
-        <span class="build-log-title" style="color:var(--teal);">Semantic career matching · COTF · build log</span>
-        <span class="build-log-status" style="color:var(--accent);">shipped</span>
-      </div>
+</main>
 
-      <div class="build-log">
+<footer>Makaato Serumaga · Built in public · <a href="https://github.com/makaato53" style="color:inherit;">github.com/makaato53</a></footer>
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">Pipeline — 4 stages</p>
+<script>
+(function(){
+  /* ---- scroll reveal ---- */
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
 
-        <div class="arch-layers">
-          <div class="arch-layer arch-layer-teal">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Stage 1 · Text encoding</span>
-              <span class="arch-layer-tech">sentence-transformers · all-MiniLM-L6-v2</span>
-            </div>
-            <div class="arch-layer-desc">Career title, industry description, skills, and tags concatenated into one document string. User input is the query. Browser-mode uses BM25 + synonym expansion offline; backend mode uses real embeddings via FastAPI on a local GPU server.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-teal">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Stage 2 · Cosine similarity</span>
-              <span class="arch-layer-tech">vectors in high-dimensional space</span>
-            </div>
-            <div class="arch-layer-desc">Documents and query represented as vectors. Cosine similarity measures the angle between them — 0° is identical meaning, 90° is unrelated. Handles paraphrasing: "I like fixing machines" and "preventive maintenance" end up pointing in roughly the same direction even with no shared words.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-teal">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Stage 3 · MMR re-ranking</span>
-              <span class="arch-layer-tech">Maximal Marginal Relevance</span>
-            </div>
-            <div class="arch-layer-desc">Pure cosine similarity clusters top results — all engineering roles if you mention engineering. MMR fixes this: each next result maximises λ × (relevance to query) − (1−λ) × (similarity to already-selected results). λ exposed as a UI slider. Lower λ = more diverse results across industries.</div>
-          </div>
-          <div class="arch-arrow">↓</div>
-          <div class="arch-layer arch-layer-neutral">
-            <div class="arch-layer-top">
-              <span class="arch-layer-name">Stage 4 · Results</span>
-              <span class="arch-layer-tech">ranked cards with match explanation</span>
-            </div>
-            <div class="arch-layer-desc">Cards show match score, NAICS code, skills, education pathways, and a "why this matched" explanation row. Backend mode returns richer explanation strings from the API.</div>
-          </div>
-        </div>
+  /* ---- nav zone tracking ---- */
+  var navEl = document.querySelector('nav');
+  var zoneMap = { 'zone-terminal':'terminal', 'zone-mesh':'mesh', 'zone-blueprint':'blueprint' };
+  var zoneObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) navEl.setAttribute('data-zone', zoneMap[e.target.id]);
+    });
+  }, { rootMargin: '-48% 0px -48% 0px', threshold: 0 });
+  ['zone-terminal','zone-mesh','zone-blueprint'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) zoneObserver.observe(el);
+  });
 
-        <p style="font-size:0.8rem;color:var(--text3);font-family:var(--mono-font);letter-spacing:0.06em;te
-      }
+  /* ---- mesh wireframe background ---- */
+  var canvas = document.getElementById('meshCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var zoneMesh = document.getElementById('zone-mesh');
+
+  var phi = (1 + Math.sqrt(5)) / 2;
+  var raw = [
+    [0,1,phi],[0,-1,phi],[0,1,-phi],[0,-1,-phi],
+    [1,phi,0],[-1,phi,0],[1,-phi,0],[-1,-phi,0],
+    [phi,0,1],[-phi,0,1],[phi,0,-1],[-phi,0,-1]
+  ];
+  var edges = [];
+  for (var i = 0; i < raw.length; i++){
+    for (var j = i + 1; j < raw.length; j++){
+      var dx = raw[i][0]-raw[j][0], dy = raw[i][1]-raw[j][1], dz = raw[i][2]-raw[j][2];
+      var d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (Math.abs(d - 2) < 0.05) edges.push([i,j]);
     }
-    animId = requestAnimationFrame(draw);
   }
 
+  function rotate(v, ax, ay){
+    var x=v[0], y=v[1], z=v[2];
+    var cx=Math.cos(ax), sx=Math.sin(ax);
+    var y1 = y*cx - z*sx, z1 = y*sx + z*cx;
+    var cy=Math.cos(ay), sy=Math.sin(ay);
+    var x2 = x*cy + z1*sy, z2 = -x*sy + z1*cy;
+    return [x2, y1, z2];
+  }
+
+  var shapes = [
+    { cy:0.05, cx:0.88, r:0.9, speed:0.0032, ax:0.2, ay:0.4 },
+    { cy:0.22, cx:0.09, r:1.15, speed:0.0026, ax:0.6, ay:1.1 },
+    { cy:0.40, cx:0.90, r:0.75, speed:0.0038, ax:1.2, ay:0.3 },
+    { cy:0.58, cx:0.08, r:1.25, speed:0.0022, ax:0.4, ay:1.6 },
+    { cy:0.75, cx:0.90, r:0.95, speed:0.003, ax:1.5, ay:0.7 },
+    { cy:0.92, cx:0.10, r:1.05, speed:0.0027, ax:0.8, ay:1.3 }
+  ];
+
+  var w, h, dpr;
+  function resize(){
+    var el = zoneMesh;
+    dpr = window.devicePixelRatio || 1;
+    w = el.clientWidth; h = el.scrollHeight;
+    canvas.style.height = h + 'px';
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', resize);
   resize();
-  initParticles();
-  draw();
-  window.addEventListener('resize', () => { resize(); });
+
+  function drawShape(s, ax, ay){
+    var scale = Math.min(w, 900) * 0.06 * s.r;
+    var dist = 4.4;
+    var ox = w * s.cx, oy = h * s.cy;
+    var pts = raw.map(function(v){
+      var r = rotate(v, ax, ay);
+      var f = 1 / (1 - r[2]/dist);
+      return { x: ox + r[0]*scale*f, y: oy + r[1]*scale*f, z: r[2] };
+    });
+    edges.forEach(function(e){
+      var a = pts[e[0]], b = pts[e[1]];
+      var depth = (a.z + b.z) / 2;
+      var alpha = 0.10 + (depth + 1.9) / 3.8 * 0.22;
+      ctx.globalAlpha = Math.max(0.06, Math.min(0.32, alpha));
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    });
+  }
+
+  ctx.strokeStyle = '#8b6bff';
+  ctx.lineWidth = 1;
+  ctx.shadowColor = 'rgba(139,107,255,0.5)';
+  ctx.shadowBlur = 6;
+
+  function frame(){
+    ctx.clearRect(0,0,w,h);
+    shapes.forEach(function(s){ drawShape(s, s.ax, s.ay); });
+    ctx.globalAlpha = 1;
+  }
+
+  if (reduceMotion){
+    frame();
+  } else {
+    (function loop(){
+      shapes.forEach(function(s){ s.ax += s.speed; s.ay += s.speed * 1.4; });
+      frame();
+      requestAnimationFrame(loop);
+    })();
+    setTimeout(resize, 400);
+  }
 })();
-
-/* ── THEME TOGGLE ─────────────────────── */
-const html = document.documentElement;
-const btn = document.getElementById('theme-toggle');
-const stored = localStorage.getItem('ms-theme');
-if (stored) { html.setAttribute('data-theme', stored); btn.textContent = stored === 'dark' ? 'Light' : 'Dark'; }
-
-btn.addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  btn.textContent = next === 'dark' ? 'Light' : 'Dark';
-  localStorage.setItem('ms-theme', next);
-});
-
-/* ── SCROLL REVEAL ─────────────────────── */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-}, { threshold: 0.08 });
-
-document.querySelectorAll('section:not(.hero)').forEach(s => observer.observe(s));
 </script>
 </body>
 </html>
