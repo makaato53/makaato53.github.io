@@ -693,7 +693,7 @@ footer{
   var w, h, dpr;
   function resize(){
     var el = zoneMesh;
-    dpr = window.devicePixelRatio || 1;
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     w = el.clientWidth; h = el.scrollHeight;
     canvas.style.height = h + 'px';
     canvas.width = w * dpr; canvas.height = h * dpr;
@@ -712,8 +712,8 @@ footer{
       var f = 1 / (1 - r[2]/dist);
       return { x: ox + r[0]*scale*f, y: oy + r[1]*scale*f, z: r[2] };
     });
-    var alphaCap = s.dim ? 0.16 : 0.44;
-    var alphaFloor = s.dim ? 0.04 : 0.12;
+    var alphaCap = s.dim ? 0.18 : 0.48;
+    var alphaFloor = s.dim ? 0.05 : 0.14;
     edges.forEach(function(e){
       var a = pts[e[0]], b = pts[e[1]];
       var depth = (a.z + b.z) / 2;
@@ -742,7 +742,7 @@ footer{
         var ddx = positions[m].x - positions[n].x, ddy = positions[m].y - positions[n].y;
         var dd = Math.sqrt(ddx*ddx + ddy*ddy);
         if (dd < connectDist){
-          ctx.globalAlpha = (dim ? 0.08 : 0.22) * (1 - dd/connectDist);
+          ctx.globalAlpha = (dim ? 0.09 : 0.25) * (1 - dd/connectDist);
           ctx.beginPath();
           ctx.moveTo(positions[m].x, positions[m].y);
           ctx.lineTo(positions[n].x, positions[n].y);
@@ -752,7 +752,7 @@ footer{
     }
     ctx.fillStyle = '#b39dff';
     positions.forEach(function(p){
-      ctx.globalAlpha = dim ? 0.14 : 0.38;
+      ctx.globalAlpha = dim ? 0.16 : 0.42;
       ctx.beginPath();
       ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
       ctx.fill();
@@ -763,25 +763,37 @@ footer{
   function frame(){
     ctx.clearRect(0,0,w,h);
     ctx.lineWidth = 1;
-    ctx.shadowBlur = 7;
     ctx.strokeStyle = '#8b6bff';
-    ctx.shadowColor = 'rgba(139,107,255,0.5)';
     var centers = shapes.map(function(s){ return drawShape(s, s.ax, s.ay); });
-    ctx.shadowBlur = 3;
-    ctx.shadowColor = 'rgba(179,157,255,0.4)';
     shapes.forEach(function(s, si){ drawCluster(centers[si], clusters[si], t, s.dim); });
     ctx.globalAlpha = 1;
+  }
+
+  var running = false, rafId = null;
+  function loop(){
+    shapes.forEach(function(s){ s.ax += s.speed; s.ay += s.speed * 1.4; });
+    t += 1;
+    frame();
+    if (running) rafId = requestAnimationFrame(loop);
+  }
+  function start(){
+    if (running || reduceMotion) return;
+    running = true;
+    rafId = requestAnimationFrame(loop);
+  }
+  function stop(){
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
   }
 
   if (reduceMotion){
     frame();
   } else {
-    (function loop(){
-      shapes.forEach(function(s){ s.ax += s.speed; s.ay += s.speed * 1.4; });
-      t += 1;
-      frame();
-      requestAnimationFrame(loop);
-    })();
+    /* only animate while this zone is actually on screen — the canvas backs a very tall section, so redrawing it continuously off-screen is wasted work and was the main source of the slowdown */
+    var visObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) start(); else stop(); });
+    }, { threshold: 0 });
+    visObserver.observe(zoneMesh);
     setTimeout(resize, 400);
   }
 })();
