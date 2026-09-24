@@ -417,6 +417,7 @@ footer{
 
         <div class="subhead">Changelog</div>
         <div>
+          <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-new">new</span>First real infrastructure phase for the Mars traversability project: isolated Python 3.12 venv on the RTX 3090, PyTorch 2.10/cu126, GPU + synthetic-CV pipeline smoke tests, 12/12 infra tests passing. No Mars data, pretrained weights, or model architecture yet -- deliberately scoped to environment setup only.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Landed on a concrete thesis after reading the current literature (Learning to Drive on Mars, MLNav, VeeGer, MarsNet): self-supervised visual traversability (wheel slip) from real Perseverance imagery, studied under simulated flight-compute constraints instead of a frozen foundation-model encoder.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>HUEY Phase C underway: multiple NF4 candidates + executable verification vs. single-pass BF16.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Phase B: 144-task benchmark found NF4's quality drop (−2.8pp vs. BF16) statistically inconclusive, but real in specific failure modes on replay.</span></div>
@@ -425,6 +426,45 @@ footer{
           <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Agent system: memory layer architecture settled. Hybrid ChromaDB + BM25 over pure embeddings.</span></div>
           <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>Switched to HTTP API for Ollama — cleaner boundary than Docker socket, more production-like.</span></div>
           <div class="changelog-row"><span class="changelog-date">Jun 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>LangGraph chosen over raw loop: stateful interaction, retries, branching built in.</span></div>
+        </div>
+
+        <!-- MARS TRAVERSABILITY BUILD LOG -->
+        <div class="buildlog reveal">
+          <div class="buildlog-head">
+            <span class="buildlog-title">Mars traversability &middot; build log</span>
+            <span class="buildlog-status">active build</span>
+          </div>
+
+          <blockquote class="quote">How much of a self-supervised visual traversability signal survives when the visual encoder has to run under flight-like compute instead of a frozen foundation model -- and is that signal actually coming from pixels, or from telemetry riding along with them?</blockquote>
+
+          <div class="subhead">Phase 0 &middot; Environment setup</div>
+          <div class="layers">
+            <div class="layer">
+              <div class="layer-head"><span class="layer-name">Infrastructure only</span><span class="layer-tech">RTX 3090 &middot; Python 3.12 venv &middot; PyTorch 2.10/cu126</span></div>
+              <div class="layer-desc">Deliberately scoped to environment setup, not modeling: inspected the workstation, built an isolated project nested under HUEY's repo but independently runnable (no runtime dependency on HUEY), installed a pinned PyTorch/torchvision pair matched to the existing NVIDIA driver, and wrote a GPU smoke test plus a synthetic-image CV pipeline test (decode → resize/normalize → tensor → GPU → deterministic op) to prove the infrastructure works before any real Mars imagery touches it.</div>
+            </div>
+          </div>
+
+          <div class="subhead">Numbers so far (Phase 0)</div>
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Host</div><div class="stat-body">Ubuntu 24.04.4 LTS &middot; Ryzen 9 7900X (12 physical / 24 logical cores) &middot; 30.49 GiB RAM &middot; RTX 3090, 24GB VRAM &middot; driver 595.84</div></div>
+            <div class="stat-card"><div class="stat-label">Software</div><div class="stat-body">Python 3.12.3 in an isolated venv &middot; PyTorch 2.10.0+cu126 &middot; torchvision 0.25.0+cu126 &middot; existing CUDA 12.0 toolchain left untouched</div></div>
+            <div class="stat-card"><div class="stat-label">Smoke tests</div><div class="stat-body">GPU smoke test: PASS (CUDA detected, tensor alloc + op on the 3090, memory observable). Synthetic CV pipeline: PASS -- explicitly not a claim about real Mars imagery.</div></div>
+            <div class="stat-card"><div class="stat-label">Test suite</div><div class="stat-body">12/12 infrastructure tests passing &middot; dependency check clean &middot; ~6.7 GiB environment, ~44 GiB disk free</div></div>
+          </div>
+
+          <div class="subhead">Design decisions</div>
+          <div class="decisions-grid">
+            <div class="decision-card"><div class="decision-title">Why nest under HUEY but keep it independent</div><div class="decision-body">Shares the RTX 3090 box and coding-agent workflow with HUEY, but has its own venv and zero runtime dependency on HUEY's code -- so it stays runnable, and reviewable, on its own.</div></div>
+            <div class="decision-card"><div class="decision-title">Why measure before constraining</div><div class="decision-body">Built a lightweight resource-measurement utility (wall time, RSS, CUDA allocated/reserved/peak memory) before writing any "spacecraft constraint" simulation. It's explicitly documented as allocator measurement, not an enforced limit or total GPU usage -- the throttled 3090 is a development machine, never described as literally reproducing flight hardware.</div></div>
+            <div class="decision-card"><div class="decision-title">Why the ablation moved earlier</div><div class="decision-body">The literature's own ablation (JPL, Sept 2026) shows prediction quality dropping hard -- Spearman ρ 0.721 → 0.316 -- when the vision-telemetry alignment loss is removed. Reason enough to test vision-only vs. telemetry-only vs. combined signal right after the first real dataset lands, not after months of encoder-compression work built on an unverified assumption.</div></div>
+          </div>
+
+          <div class="subhead">What's next</div>
+          <div class="openq-grid">
+            <div class="openq-card"><div class="openq-label">Next up</div><div class="openq-body">Dataset audit against the PDS Imaging Node -- can sol-aligned Perseverance NavCam imagery actually be paired with wheel-slip telemetry from public data, the way the JPL paper's internal dataset was? That answer decides whether the project proceeds as planned or pivots to semantic perception or monocular geometry instead.</div></div>
+            <div class="openq-card"><div class="openq-label">Deliberately not done yet</div><div class="openq-body">No Mars datasets or pretrained weights downloaded, no architecture chosen, no self-supervised training, no simulator, no compression, no fake "spacecraft constraints" -- all intentionally deferred until the dataset and the vision-vs-telemetry ablation say which of those is worth building.</div></div>
+          </div>
         </div>
 
         <!-- AGENT SYSTEM BUILD LOG -->
