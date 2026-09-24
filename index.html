@@ -326,12 +326,12 @@ footer{
 
         <div class="proj reveal">
           <div class="proj-left">
-            <div class="proj-name">Black hole mass from pixels alone<span class="badge">WIP</span></div>
-            <div class="proj-desc">Testing whether a CNN looking only at a quasar host galaxy's image — no spectrum, no measured velocity dispersion — carries enough morphological signal to approach spectroscopic black hole mass estimates. The current best published method (QuasarSpecNet, Dec 2025) gets 0.058 dex RMSE from spectra alone; nobody's published an image-only baseline at this scale, so there's no existing number to beat or match yet — this is genuinely open, not a reproduction. Training on the 849-quasar SDSS Reverberation Mapping sample on the RTX 3090. Open question so far: whether the bright quasar point source swamps the host galaxy's morphology before the model ever sees it.</div>
+            <div class="proj-name">Learning where it's safe to drive on Mars<span class="badge">WIP</span></div>
+            <div class="proj-desc">What can actually be inferred from a rover's camera that's useful for driving safely? Not a semantic label -- the literature's answer (JPL, Sept 2026) is a continuous, physically-grounded risk score tied to the rover's own motion: wheel slip. It's self-supervised for free from the gap between wheel and visual odometry, no hand-labeled pixels required. Building a traversability model in that spirit on real Perseverance NavCam imagery, but asking the question that paper doesn't: how much of that signal survives when the visual encoder has to run under flight-like compute instead of a frozen 300M-parameter foundation model? RTX 3090 sandbox measures the accuracy-vs-compute frontier against real flight-computer numbers (RAD750: ~266 MIPS; NASA's in-development HPSC: targeting 100x perf/watt over that).</div>
           </div>
           <div class="proj-right">
             <span class="proj-year">2026</span>
-            <div class="proj-tags"><span class="tag">PyTorch</span><span class="tag">CNN</span><span class="tag">Astropy</span><span class="tag">SDSS</span></div>
+            <div class="proj-tags"><span class="tag">PyTorch</span><span class="tag">Self-supervised</span><span class="tag">DINOv2</span><span class="tag">PDS</span></div>
           </div>
         </div>
 
@@ -417,6 +417,7 @@ footer{
 
         <div class="subhead">Changelog</div>
         <div>
+          <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Refined the black-hole detour into a concrete thesis after reading the current literature (Learning to Drive on Mars, MLNav, VeeGer, MarsNet): self-supervised visual traversability (wheel slip) from real Perseverance imagery, studied under simulated flight-compute constraints instead of a frozen foundation-model encoder.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-new">new</span>Started a black hole mass estimation project: can a CNN predict M_BH from galaxy images alone, with no spectrum? Spec'd against QuasarSpecNet (spectra, 0.058 dex RMSE) and AGNet (light curves, 0.37 dex) — no image-only baseline exists yet to compare against.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-wip">wip</span>HUEY Phase C underway: multiple NF4 candidates + executable verification vs. single-pass BF16.</span></div>
           <div class="changelog-row"><span class="changelog-date">Sep 2026</span><span class="changelog-entry"><span class="changelog-badge badge-fix">note</span>Phase B: 144-task benchmark found NF4's quality drop (−2.8pp vs. BF16) statistically inconclusive, but real in specific failure modes on replay.</span></div>
